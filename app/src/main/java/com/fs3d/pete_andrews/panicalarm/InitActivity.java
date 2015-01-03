@@ -20,11 +20,11 @@ public class InitActivity extends ActionBarActivity {
         setContentView(R.layout.activity_init);
         splashView = (TextView) findViewById(R.id.splashText);
         copyrightView = (TextView) findViewById(R.id.copyrightText);
-        copyrightView.setText("Copyright (C) 2015 Peter Andrews\nAll rights specified under" +
-                " applicable copyright law and international\ntreaties are hereby reserved\n\n" +
-                "Unauthorised duplication, distribution, broadcast and transmission constitutes a\n" +
-                "civil and/or criminal violation and may result in prosecution under applicable laws\n" +
-                "in either your home country, the author's home country, or the\n" +
+        copyrightView.setText("Copyright (C) 2015 Peter Andrews. All rights specified under" +
+                " applicable copyright law and international treaties are hereby reserved.\n\n" +
+                "Unauthorised duplication, distribution, broadcast and transmission constitutes a " +
+                "civil and/or criminal violation and may result in prosecution under applicable laws " +
+                "in either your home country, the author's home country, or the " +
                 "United States of America, as defined in applicable copyright law.");
         try {
             String splashline = "Panic Alarm v" + BuildConfig.VERSION_NAME;
