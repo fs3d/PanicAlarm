@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Panic Alarm</string>
+    <string name="splash_title">Panic Alarm vx.xx.xxx</string>
+    <string name="splash_message">Copyright message goes here.</string>
+    <string name="action_settings">Settings</string>
+
+</resources>

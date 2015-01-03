@@ -1,0 +1,53 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 21
+    buildToolsVersion "21.1.2"
+
+    def versionPropsFile = file('version.properties')
+    if (versionPropsFile.canRead()) {
+        def Properties versionProps = new Properties()
+
+        versionProps.load(new FileInputStream(versionPropsFile))
+        def value = 0
+        def runTasks = gradle.startParameter.taskNames
+        if ('assemble' in runTasks || 'assembleRelease' in runTasks || 'aR' in runTasks) {
+            value = 1
+        }
+        def versionMajor = 0
+        def versionMinor = 1
+        def versionPatch = versionProps['VERSION_PATCH'].toInteger() + value
+        def versionBuild = versionProps['VERSION_BUILD'].toInteger() + 1
+        def version_code = versionProps['VERSION_CODE'].toInteger() + value
+
+        versionProps['VERSION_PATCH'] = versionPatch.toString()
+        versionProps['VERSION_BUILD'] = versionBuild.toString()
+        versionProps['VERSION_CODE'] = version_code.toString()
+        versionProps['VERSION_STRING'] = "0.01." + versionPatch.toString() + " (Build " + versionBuild.toString() + ")"
+
+        versionProps.store(versionPropsFile.newWriter(), null)
+
+        defaultConfig {
+            applicationId "com.fs3d.pete_andrews.panicalarm"
+            minSdkVersion 14
+            targetSdkVersion 21
+            versionCode version_code
+            versionName "${versionMajor}.${versionMinor}.${versionPatch} (Build ${versionBuild})"
+        }
+    } else {
+        throw new GradleException("Unable to read version.properties file.")
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:appcompat-v7:21.0.3'
+    compile 'com.android.support:support-v4:21.0.3'
+}
