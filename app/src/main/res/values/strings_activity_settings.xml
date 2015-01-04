@@ -58,4 +58,15 @@
     <string name="pref_ringtone_silent">Silent</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
+
+    <!-- Setting strings for PanicAlarm: Communications-->
+    <string name="pref_title_send_sms">Broadcast by SMS/MMS</string>
+    <string name="pref_title_send_mail">Broadcast by email</string>
+    <string name="pref_title_send_video">Enable continuous broadcast</string>
+
+    <!-- Setting strings for PanicAlarm: AudioVisual capture-->
+
+    <!-- Setting strings for PanicAlarm: Alarms and Warnings-->
+
+    <!-- Setting strings for PanicAlarm: Location and triggers-->
 </resources>
