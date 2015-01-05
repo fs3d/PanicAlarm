@@ -8,7 +8,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".InitActivity">
+    tools:context=".InitActivity"
+    android:weightSum="1">
 
     <TextView
         android:id="@+id/splashText"
@@ -22,5 +23,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/splash_message" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter debug mode"
+        android:id="@+id/btnDebug"
+        android:layout_gravity="center_horizontal"
+        android:onClick="goDebug" />
+
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Service Status"
+        android:id="@+id/serviceToggle"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.04" />
 
 </LinearLayout>
