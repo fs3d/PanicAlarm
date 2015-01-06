@@ -3,31 +3,12 @@
 
     <!-- Strings related to Settings -->
 
-    <!-- Example General settings -->
-    <string name="pref_header_general">General</string>
+    <!-- Pref Headers - General settings -->
+    <string name="pref_header_communications">Communications and Broadcasting</string>
+    <string name="pref_header_triggers">Locations and Triggers</string>
+    <string name="pref_header_warnings">Warnings and Alerts</string>
+    <string name="pref_header_capture">Recording and capture</string>
 
-    <string name="pref_title_social_recommendations">Enable social recommendations</string>
-    <string name="pref_description_social_recommendations">Recommendations for people to contact
-        based on your message history
-    </string>
-
-    <string name="pref_title_display_name">Display name</string>
-    <string name="pref_default_display_name">John Smith</string>
-
-    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
-    <string-array name="pref_example_list_titles">
-        <item>Always</item>
-        <item>When possible</item>
-        <item>Never</item>
-    </string-array>
-    <string-array name="pref_example_list_values">
-        <item>1</item>
-        <item>0</item>
-        <item>-1</item>
-    </string-array>
-
-    <!-- Example settings for Data & Sync -->
-    <string name="pref_header_data_sync">Data &amp; sync</string>
 
     <string name="pref_title_sync_frequency">Sync frequency</string>
     <string-array name="pref_sync_frequency_titles">
@@ -47,24 +28,41 @@
         <item>-1</item>
     </string-array>
 
-    <string name="pref_title_system_sync_settings">System sync settings</string>
-
-    <!-- Example settings for Notifications -->
-    <string name="pref_header_notifications">Notifications</string>
-
-    <string name="pref_title_new_message_notifications">New message notifications</string>
-
-    <string name="pref_title_ringtone">Ringtone</string>
-    <string name="pref_ringtone_silent">Silent</string>
-
-    <string name="pref_title_vibrate">Vibrate</string>
-
     <!-- Setting strings for PanicAlarm: Communications-->
     <string name="pref_title_send_sms">Broadcast by SMS/MMS</string>
+    <string name="pref_desc_send_sms">Enables broadcasting of panic messages by SMS and MMS</string>
     <string name="pref_title_send_mail">Broadcast by email</string>
+    <string name="pref_desc_send_mail">Enables broadcasting of panic messages via mail account</string>
     <string name="pref_title_send_video">Enable continuous broadcast</string>
+    <string name="pref_desc_send_video">Enables broadcasting of video</string>
     <string name="pref_title_enable_standby">Enable vigilance mode</string>
+    <string name="pref_desc_enable_standby">Enables GPS, location and accelerometer standby mode</string>
     <string name="pref_title_enable_boot">Keep state on restart</string>
+    <string name="pref_desc_enable_boot">Allows Panic Service to resume in its\' last state if the phone is restarted</string>
+    <string name="pref_title_broadcast_frequency">Frequency of GPS broadcasts (Panic mode)</string>
+    <string name="pref_desc_broadcast_frequency">This should be as frequently as possible while balancing battery usage.</string>
+    <string name="pref_title_vigilance_broadcast_frequency">Frequency of GPS broadcasts (Vigilance mode)</string>
+    <string name="pref_desc_vigilance_broadcast_frequency">This should be frequently enough to keep the GPS updated so that resolving the location in panic mode is quicker.</string>
+    <string-array name="pref_broadcast_frequency_titles">
+        <item>10 seconds</item>
+        <item>30 seconds</item>
+        <item>1 minute</item>
+        <item>2 minutes</item>
+        <item>5 minutes</item>
+        <item>10 minutes</item>
+        <item>30 minutes</item>
+        <item>Once only (immediate)</item>
+    </string-array>
+    <string-array name="pref_broadcast_frequency_values">
+        <item>10</item>
+        <item>30</item>
+        <item>60</item>
+        <item>120</item>
+        <item>300</item>
+        <item>600</item>
+        <item>1800</item>
+        <item>-1</item>
+    </string-array>
 
     <!-- Setting strings for PanicAlarm: AudioVisual capture-->
     <string name="pref_title_enable_vid">Enable video capture</string>
@@ -80,8 +78,29 @@
     <!-- Setting strings for PanicAlarm: Alarms and Warnings-->
     <string name="pref_title_alert_audio">Enable audio alarm</string>
     <string name="pref_title_override_vol">Override audio volume</string>
+    <string name="pref_title_notify">Enable service status notification</string>
+    <string name="pref_title_stealth">Stealth mode</string>
 
     <!-- Setting strings for PanicAlarm: Location and triggers-->
     <string name="pref_title_gps">Enable GPS location broadcast</string>
-    <string name="pref_title_gps_freq">Broadcast repeatedly</string>
+    <string name="pref_title_button_power">Enable power button trigger</string>
+    <string name="pref_title_button_power_count">Power button number of presses</string>
+    <string name="pref_title_button_media">Enable headphone trigger</string>
+    <string name="pref_title_button_media_count">Headphone number of presses</string>
+    <string-array name="pref_button_number_titles">
+        <item>Once</item>
+        <item>Twice</item>
+        <item>3 times</item>
+        <item>4 times</item>
+        <item>5 times</item>
+    </string-array>
+    <string-array name="pref_button_number_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+    <string name="pref_title_sensor_accel">Enable accelerometer trigger</string>
+    <string name="pref_title_sensor_accel_sens">Accelerometer trigger sensitivity</string>
 </resources>
