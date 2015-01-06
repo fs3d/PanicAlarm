@@ -1,33 +1,71 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <CheckBoxPreference
-        android:defaultValue="true"
-        android:key="example_checkbox"
-        android:summary="@string/pref_description_social_recommendations"
-        android:title="@string/pref_title_social_recommendations" />
+    <PreferenceCategory android:title="@string/pref_header_communications">
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="check_broadcast_sms"
+            android:summary="@string/pref_desc_send_sms"
+            android:title="@string/pref_title_send_sms" />
 
-    <!-- NOTE: EditTextPreference accepts EditText attributes. -->
-    <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
-    <EditTextPreference
-        android:capitalize="words"
-        android:defaultValue="@string/pref_default_display_name"
-        android:inputType="textCapWords"
-        android:key="example_text"
-        android:maxLines="1"
-        android:selectAllOnFocus="true"
-        android:singleLine="true"
-        android:title="@string/pref_title_display_name" />
 
-    <!-- NOTE: Hide buttons to simplify the UI. Users can touch outside the dialog to
-         dismiss it. -->
-    <!-- NOTE: ListPreference's summary should be set to its value by the activity code. -->
-    <ListPreference
-        android:defaultValue="-1"
-        android:entries="@array/pref_example_list_titles"
-        android:entryValues="@array/pref_example_list_values"
-        android:key="example_list"
-        android:negativeButtonText="@null"
-        android:positiveButtonText="@null"
-        android:title="@string/pref_title_add_friends_to_messages" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="check_broadcast_mail"
+            android:summary="@string/pref_desc_send_mail"
+            android:title="@string/pref_title_send_mail" />
+        <!-- NOTE: EditTextPreference accepts EditText attributes. -->
+        <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="check_enable_boot"
+            android:summary="@string/pref_desc_enable_boot"
+            android:title="@string/pref_title_enable_boot" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_header_capture">
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="alert_audio_check"
+            android:summary="@string/pref_title_alert_audio"
+            android:title="@string/pref_title_alert_audio" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_header_triggers">
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="check_trigger_power"
+            android:summary="Enables use of the power button to trigger a panic"
+            android:title="@string/pref_title_button_power" />
+        <ListPreference
+            android:defaultValue="-1"
+            android:entries="@array/pref_button_number_titles"
+            android:entryValues="@array/pref_button_number_values"
+            android:summary="Number of button presses to trigger a panic"
+            android:title="@string/pref_title_button_power_count" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="check_trigger_mediakey"
+            android:summary="Enables use of the Headset button to trigger a panic"
+            android:title="@string/pref_title_button_media" />
+        <!-- NOTE: ListPreference's summary should be set to its value by the activity code. -->
+        <ListPreference
+            android:defaultValue="-1"
+            android:entries="@array/pref_broadcast_frequency_titles"
+            android:entryValues="@array/pref_broadcast_frequency_values"
+            android:key="list_panic_frequency"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:summary="@string/pref_desc_broadcast_frequency"
+            android:title="@string/pref_title_broadcast_frequency" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_header_warnings">
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="check_warn_test"
+            android:summary="@string/pref_title_alert_audio"
+            android:title="@string/pref_title_notify" />
+    </PreferenceCategory>
 
 </PreferenceScreen>
