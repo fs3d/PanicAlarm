@@ -17,7 +17,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SettingsActivity"
+            android:name=".PrefsActivity"
             android:label="@string/title_activity_settings"
             android:parentActivityName=".InitActivity">
             <meta-data

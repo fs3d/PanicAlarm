@@ -1,13 +1,11 @@
 package com.fs3d.pete_andrews.panicalarm;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 
@@ -57,7 +55,7 @@ public class InitActivity extends ActionBarActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             // Launch Activity with Preferences Fragments
-            Intent intent = new Intent(this, SettingsActivity.class);
+            Intent intent = new Intent(this, PrefsActivity.class);
             startActivity(intent);
             return true;
         }
