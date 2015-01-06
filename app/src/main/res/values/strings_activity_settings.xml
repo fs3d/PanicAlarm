@@ -5,9 +5,15 @@
 
     <!-- Pref Headers - General settings -->
     <string name="pref_header_communications">Communications and Broadcasting</string>
-    <string name="pref_header_triggers">Locations and Triggers</string>
+    <string name="pref_header_communications_desc">Settings relating to how and when a panic is communicated.</string>
+    <string name="pref_header_triggers">Triggers</string>
+    <string name="pref_header_triggers_desc">Settings relating to how a panic can be triggered.</string>
+    <string name="pref_header_location">Location Reporting</string>
+    <string name="pref_header_location_desc">Settings relating to how this device reports your location and when to do so.</string>
     <string name="pref_header_warnings">Warnings and Alerts</string>
-    <string name="pref_header_capture">Recording and capture</string>
+    <string name="pref_header_warnings_desc">Settings related to panic-generated audio warnings, notifications, or if the device shows any sign of a panic or not.</string>
+    <string name="pref_header_capture">Recording \amp Capture setup</string>
+    <string name="pref_header_capture_desc">Settings related to recording of video and audio, capture of pictures, and camera/microphone related functions.</string>
 
 
     <string name="pref_title_sync_frequency">Sync frequency</string>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/pref_header_communications">
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="check_broadcast_sms"
+            android:summary="@string/pref_desc_send_sms"
+            android:title="@string/pref_title_send_sms" />
+
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="check_broadcast_mail"
+            android:summary="@string/pref_desc_send_mail"
+            android:title="@string/pref_title_send_mail" />
+        <!-- NOTE: EditTextPreference accepts EditText attributes. -->
+        <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="check_enable_boot"
+            android:summary="@string/pref_desc_enable_boot"
+            android:title="@string/pref_title_enable_boot" />
+
+    </PreferenceCategory>
+</PreferenceScreen>
