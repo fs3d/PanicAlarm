@@ -11,6 +11,6 @@ public class PrefsFragmentCapture extends PreferenceFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.pref_comms);
+        addPreferencesFromResource(R.xml.pref_capture);
     }
 }
