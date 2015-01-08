@@ -72,26 +72,40 @@
 
     <!-- Setting strings for PanicAlarm: AudioVisual capture-->
     <string name="pref_title_enable_vid">Enable video capture</string>
+    <string name="pref_desc_enable_vid">Allows you to use the camera(s) on your device to capture video.</string>
     <string name="pref_title_enable_vid_flash">Use video LED</string>
+    <string name="pref_desc_enable_vid_flash">When enabled, a panic will switch the camera LED on when using your device rear-facing camera.</string>
     <string name="pref_title_enable_pic">Enable photo capture</string>
+    <string name="pref_desc_enable_pic">Allows your cameras to capture still images during a panic.</string>
     <string name="pref_title_enable_pic_flash">Use photo flash LED</string>
+    <string name="pref_desc_enable_pic_flash">The LED will flash when a still picture is taken.</string>
     <string name="pref_title_enable_mic">Enable audio capture</string>
+    <string name="pref_desc_enable_mic">This will capture audio using any available microphones when a panic is triggered.</string>
     <string name="pref_title_select_mic">Select microphone(s) to capture</string>
+    <string name="pref_desc_select_mic">More than 1 microphone can be selected if preferred.</string>
     <string name="pref_title_enable_capture">Enable broadcasting</string>
     <string name="pref_title_enable_twitch">Enable Twitch</string>
     <string name="pref_title_enable_ftp">Enable FTP stream</string>
 
     <!-- Setting strings for PanicAlarm: Alarms and Warnings-->
     <string name="pref_title_alert_audio">Enable audio alarm</string>
+    <string name="pref_desc_alert_audio">Provides an audible alarm in the event of a panic that will sound out over the speakers.</string>
     <string name="pref_title_override_vol">Override audio volume</string>
+    <string name="pref_desc_override_vol">Forces the audible alarm to play at maximum volume over the speakers.</string>
     <string name="pref_title_notify">Enable service status notification</string>
+    <string name="pref_desc_notify">Will notify you via the notification system what is happening with the Panic Alarm service.</string>
     <string name="pref_title_stealth">Stealth mode</string>
+    <string name="pref_desc_stealth">When enabled, will prevent any obvious sign that the Panic Service is working. See help for further details.</string>
 
     <!-- Setting strings for PanicAlarm: Location and triggers-->
     <string name="pref_title_gps">Enable GPS location broadcast</string>
+    <string name="pref_desc_gps">This will use GPS satellites and mobile networks wherever possible to broadcast your device location.</string>
     <string name="pref_title_button_power">Enable power button trigger</string>
+    <string name="pref_desc_button_power">This will let you trigger a panic using the power button on your device.</string>
     <string name="pref_title_button_power_count">Power button number of presses</string>
+    <string name="pref_desc_button_power_count">The maximum is 5.</string>
     <string name="pref_title_button_media">Enable headphone trigger</string>
+    <string name="pref_desc_button_media">This will allow your headphone playback/answer trigger button to trigger a panic.</string>
     <string name="pref_title_button_media_count">Headphone number of presses</string>
     <string-array name="pref_button_number_titles">
         <item>Once</item>
@@ -108,5 +122,7 @@
         <item>5</item>
     </string-array>
     <string name="pref_title_sensor_accel">Enable accelerometer trigger</string>
+    <string name="pref_desc_sensor_accel">Allows sudden changes in accelerometer state (e.g. dropping a phone) to trigger a panic.</string>
     <string name="pref_title_sensor_accel_sens">Accelerometer trigger sensitivity</string>
+    <string name="pref_desc_sensor_accel_sens">Determines the trigger sensitivity of accelerometer. Tap here to launch a wizard to do this.</string>
 </resources>
