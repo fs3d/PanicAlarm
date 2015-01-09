@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.util.Log;
 
 /**
  * Created by peteb_000 on 03/01/2015. Further edits pending
@@ -18,7 +19,7 @@ public class PrefsFragmentService extends PreferenceFragment {
         addPreferencesFromResource(R.xml.pref_general);
         final Context ctxt = this.getActivity();
         // Check for password preference so we can launch a dedicated Password Activity from it.
-        checkPassword = (Preference) findPreference("check_settings_passwd");
+        checkPassword = findPreference("check_settings_passwd");
         final Boolean passActivityArg = checkPassword.getSharedPreferences().getBoolean("check_settings_passwd", false);
         checkPassword.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -32,8 +33,11 @@ public class PrefsFragmentService extends PreferenceFragment {
     }
 
     public void onActivityResult(int reqCode, int resCode, Intent data) {
-        String resultStr = "RESULT: Passcode: " + data.getStringExtra("Password") + " - CryptKey:" + data.getStringExtra("CryptKey");
-        if (data.getStringExtra("CryptKey").equals("Unset")) {
+        String passcd = data.getStringExtra("Password");
+        String CryptKey = data.getStringExtra("CryptKey");
+        String resultStr = "RESULT: Passcode: " + passcd + " - CryptKey:" + CryptKey;
+        Log.i("PrefsFragmentService", resultStr);
+        if (CryptKey.equals("Unset")) {
             resultStr = "RESULT: Service password unset.";
         }
         checkPassword.setSummary(resultStr);
