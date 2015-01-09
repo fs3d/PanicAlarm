@@ -33,7 +33,7 @@ public class PrefsFragmentService extends PreferenceFragment {
 
     public void onActivityResult(int reqCode, int resCode, Intent data) {
         String resultStr = "RESULT: Passcode: " + data.getStringExtra("Password") + " - CryptKey:" + data.getStringExtra("CryptKey");
-        if (data.getStringExtra("Password") == "") {
+        if (data.getStringExtra("CryptKey").equals("Unset")) {
             resultStr = "RESULT: Service password unset.";
         }
         checkPassword.setSummary(resultStr);

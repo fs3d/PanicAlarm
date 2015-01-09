@@ -22,7 +22,7 @@ public class PasswordActivity extends Activity {
                 serv_stat = true;
             }
         } else {
-            serv_stat = false;
+            serv_stat = true;
         }
         new Thread(new Runnable() {
             public void run() {
@@ -44,7 +44,7 @@ public class PasswordActivity extends Activity {
             feedback.putExtra("CryptKey", "123456");
         } else {
             feedback.putExtra("Password", "");
-            feedback.putExtra("CryptKey", "");
+            feedback.putExtra("CryptKey", "Unset");
         }
         setResult(RESULT_OK, feedback);
         super.finish();
