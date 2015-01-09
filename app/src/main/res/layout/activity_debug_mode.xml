@@ -7,4 +7,112 @@
     android:orientation="vertical"
     tools:context="com.fs3d.pete_andrews.panicalarm.DebugMode">
 
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="Debug Mode" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Report GPS" />
+
+        <Button
+            android:id="@+id/button2"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Report Accelerometer" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/button3"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Report Microphone" />
+
+        <Button
+            android:id="@+id/button4"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Report Camera" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/button5"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Report SMS" />
+
+        <Button
+            android:id="@+id/button6"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Report Mail" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/button7"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Report Headset" />
+
+        <Button
+            android:id="@+id/button8"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Report Power" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_gravity="center_horizontal"
+        android:background="@android:color/holo_green_dark"
+        android:nestedScrollingEnabled="true"
+        android:onClick="resetStatusBox"
+        android:text="Default &amp; default" />
+
 </LinearLayout>
