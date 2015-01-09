@@ -1,3 +1,15 @@
-<PreferenceScreen>
-
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/pref_header_service">
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="check_enable_boot"
+            android:summary="@string/pref_desc_enable_boot"
+            android:title="@string/pref_title_enable_boot" />
+        <EditTextPreference
+            android:defaultValue="__NULL"
+            android:inputType="textPassword"
+            android:key="edittext_settings_passwd"
+            android:summary="Service Password"
+            android:title="Enables a password to make changes to the Panic Alarm service." />
+    </PreferenceCategory>
 </PreferenceScreen>

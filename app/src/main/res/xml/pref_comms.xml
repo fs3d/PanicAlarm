@@ -20,6 +20,5 @@
             android:key="check_enable_boot"
             android:summary="@string/pref_desc_enable_boot"
             android:title="@string/pref_title_enable_boot" />
-
     </PreferenceCategory>
 </PreferenceScreen>

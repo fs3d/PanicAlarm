@@ -4,6 +4,8 @@
     <!-- Pref Headers - General settings -->
     <string name="pref_header_communications">Communications &amp; Broadcasting</string>
     <string name="pref_header_communications_desc">Settings relating to how and when a panic is communicated.</string>
+    <string name="pref_header_service">Panic Alarm Service</string>
+    <string name="pref_header_service_desc">Settings related to the background service that allows this application to do its\' job.</string>
     <string name="pref_header_triggers">Triggers</string>
     <string name="pref_header_triggers_desc">Settings relating to how a panic can be triggered.</string>
     <string name="pref_header_location">Location Reporting</string>
@@ -99,13 +101,17 @@
     <!-- Setting strings for PanicAlarm: Location and triggers-->
     <string name="pref_title_gps">Enable GPS location broadcast</string>
     <string name="pref_desc_gps">This will use GPS satellites and mobile networks wherever possible to broadcast your device location.</string>
+    <string name="pref_title_gps_keepalive">Enable GPS keep-alive mode</string>
+    <string name="pref_desc_gps_keepalive">This will enable GPS location broadcasting in a special vigilance mode so that if a panic is triggered, the location is available immediately.</string>
     <string name="pref_title_button_power">Enable power button trigger</string>
     <string name="pref_desc_button_power">This will let you trigger a panic using the power button on your device.</string>
     <string name="pref_title_button_power_count">Power button number of presses</string>
-    <string name="pref_desc_button_power_count">The maximum is 5.</string>
+    <string name="pref_desc_button_power_count">The maximum is 5. It is advisable to set this to 3 or higher.</string>
     <string name="pref_title_button_media">Enable headphone trigger</string>
     <string name="pref_desc_button_media">This will allow your headphone playback/answer trigger button to trigger a panic.</string>
     <string name="pref_title_button_media_count">Headphone number of presses</string>
+    <string name="pref_desc_button_media_count">The maximum is 6. It is advisable to set this to 3 or higher
+        (provided it does not conflict with the settings used on any playback apps you may use).</string>
     <string-array name="pref_button_number_titles">
         <item>Once</item>
         <item>Twice</item>

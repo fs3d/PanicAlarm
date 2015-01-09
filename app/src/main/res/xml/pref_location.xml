@@ -1,4 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/pref_header_location">
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="check_gps_broadcast"
+            android:summary="@string/pref_desc_gps"
+            android:title="@string/pref_title_gps" />
 
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="check_gps_keepalive"
+            android:summary="@string/pref_desc_send_mail"
+            android:title="@string/pref_title_send_mail" />
+
+    </PreferenceCategory>
 </PreferenceScreen>
