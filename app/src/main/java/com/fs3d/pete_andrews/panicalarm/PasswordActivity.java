@@ -10,6 +10,7 @@ public class PasswordActivity extends Activity {
 
     Boolean serv_stat;
 
+    // A
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

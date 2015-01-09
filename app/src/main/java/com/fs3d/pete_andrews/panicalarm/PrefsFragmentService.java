@@ -7,7 +7,7 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.util.Log;
 
-/**
+/** //
  * Created by peteb_000 on 03/01/2015. Further edits pending
  */
 public class PrefsFragmentService extends PreferenceFragment {
