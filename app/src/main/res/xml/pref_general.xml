@@ -5,11 +5,10 @@
             android:key="check_enable_boot"
             android:summary="@string/pref_desc_enable_boot"
             android:title="@string/pref_title_enable_boot" />
-        <EditTextPreference
-            android:defaultValue="__NULL"
-            android:inputType="textPassword"
-            android:key="edittext_settings_passwd"
-            android:summary="Service Password"
-            android:title="Enables a password to make changes to the Panic Alarm service." />
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="check_settings_passwd"
+            android:summary="With this option selected, a password will be used to secure the Panic Service."
+            android:title="Service Password" />
     </PreferenceCategory>
 </PreferenceScreen>

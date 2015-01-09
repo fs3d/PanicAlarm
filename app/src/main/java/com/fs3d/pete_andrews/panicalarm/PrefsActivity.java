@@ -19,22 +19,26 @@ public class PrefsActivity extends PreferenceActivity {
     @Override
     protected boolean isValidFragment(String fragmentName) {
         boolean rslt;
-        if (PrefsFragmentComms.class.getName().equals(fragmentName) == true) {
+        if (PrefsFragmentComms.class.getName().equals(fragmentName)) {
             rslt = true;
         } else {
-            if (PrefsFragmentCapture.class.getName().equals(fragmentName) == true) {
+            if (PrefsFragmentCapture.class.getName().equals(fragmentName)) {
                 rslt = true;
             } else {
-                if (PrefsFragmentLocation.class.getName().equals(fragmentName) == true) {
+                if (PrefsFragmentLocation.class.getName().equals(fragmentName)) {
                     rslt = true;
                 } else {
-                    if (PrefsFragmentTriggers.class.getName().equals(fragmentName) == true) {
+                    if (PrefsFragmentTriggers.class.getName().equals(fragmentName)) {
                         rslt = true;
                     } else {
-                        if (PrefsFragmentWarnings.class.getName().equals(fragmentName) == true) {
+                        if (PrefsFragmentWarnings.class.getName().equals(fragmentName)) {
                             rslt = true;
                         } else {
-                            rslt = false;
+                            if (PrefsFragmentService.class.getName().equals(fragmentName)) {
+                                rslt = true;
+                            } else {
+                                rslt = false;
+                            }
                         }
                     }
                 }
