@@ -20,10 +20,10 @@ public class PrefsFragmentService extends PreferenceFragment {
         final Context ctxt = this.getActivity();
         // Check for password preference so we can launch a dedicated Password Activity from it.
         checkPassword = findPreference("check_settings_passwd");
-        final Boolean passActivityArg = checkPassword.getSharedPreferences().getBoolean("check_settings_passwd", false);
         checkPassword.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
+                Boolean passActivityArg = checkPassword.getSharedPreferences().getBoolean("check_settings_passwd", true);
                 Intent intnt = new Intent(ctxt, PasswordActivity.class);
                 intnt.putExtra("passworded", passActivityArg);
                 startActivityForResult(intnt, 1);

@@ -19,13 +19,6 @@ public class PasswordActivity extends Activity {
         if (incoming != null) {
             Log.i("PasswordActivity", "Intent data discovered");
             serv_stat = incoming.getBoolean("passworded");
-            if (serv_stat) {
-                Log.i("PasswordActivity", "serv_stat incoming was true. Now set to false.");
-                serv_stat = false;
-            } else {
-                Log.i("PasswordActivity", "serv_stat incoming was false. Now set to true.");
-                serv_stat = true;
-            }
         } else {
             Log.i("PasswordActivity", "No intent data discovered.");
         }
