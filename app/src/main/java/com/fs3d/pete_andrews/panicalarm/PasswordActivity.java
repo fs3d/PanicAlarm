@@ -1,75 +1,107 @@
 package com.fs3d.pete_andrews.panicalarm;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.preference.DialogPreference;
+import android.util.AttributeSet;
 import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
+import android.widget.EditText;
 
 
-public class PasswordActivity extends Activity {
+public class PasswordActivity extends DialogPreference {
 
-    Boolean serv_stat;
-    String passwd;
-    TextView tvPass1, tvPass2, tvTTL;
-    Button btnAccept, btnCancel;
+    String mCurrentValue, mNewValue;
+    private EditText passwd1, passwd2;
 
-    // A
+    public PasswordActivity(Context ctxt, AttributeSet attrs) {
+        super(ctxt, attrs);
+        setDialogLayoutResource(R.layout.activity_password);
+        setPositiveButtonText("Set Password");
+        setNegativeButtonText("Cancel");
+        setDialogIcon(null);
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setTheme(android.R.style.Theme_Dialog);
-        setContentView(R.layout.activity_password);
-        btnCancel = (Button) findViewById(R.id.btnCancelPass);
-        btnAccept = (Button) findViewById(R.id.btnAcceptPass);
-        tvPass1 = (TextView) findViewById(R.id.etPassword1);
-        tvPass2 = (TextView) findViewById(R.id.etPassword2);
-        tvTTL = (TextView) findViewById(R.id.tvPassTitle);
-        setFinishOnTouchOutside(false);
-        Bundle incoming = getIntent().getExtras();
-        if (incoming != null) {
-            Log.i("PasswordActivity", "Intent data discovered");
-            serv_stat = incoming.getBoolean("passworded");
-            if (serv_stat) {
-                // Password Status has been set. Require existing password first.
-                tvTTL.setText("Pref Boolean Set to True on entry.");
-            } else {
-                // Password Status has not been set. New password can be set up.
-                tvTTL.setText("Pref Boolean Set to False on entry.");
+    protected void onBindDialogView(View vw) {
+        Dialog here = getDialog();
+        passwd1 = (EditText) here.findViewById(R.id.et_password1);
+        passwd1 = (EditText) here.findViewById(R.id.et_password1);
+        super.onBindDialogView(vw);
+    }
+
+    @Override
+    protected void onDialogClosed(boolean positiveResult) {
+        if (!positiveResult)
+            return;
+
+        Dialog here = getDialog();
+        passwd1 = (EditText) here.findViewById(R.id.et_password1);
+        passwd2 = (EditText) here.findViewById(R.id.et_password2);
+
+        SharedPreferences.Editor editor = getEditor();
+        editor.putString(getKey(), passwd1.getText().toString());
+    }
+
+    @Override
+    protected Parcelable onSaveInstanceState() {
+        final Parcelable superState = super.onSaveInstanceState();
+        if (isPersistent()) {
+            return superState;
+        }
+        final SavedState myState = new SavedState(superState);
+        myState.value = mNewValue;
+        return myState;
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Parcelable state) {
+        if (state == null || !state.getClass().equals(SavedState.class)) {
+            super.onRestoreInstanceState(state);
+            return;
+        }
+
+        SavedState myState = (SavedState) state;
+        super.onRestoreInstanceState(myState.getSuperState());
+        // mPasswordWidget.setValue(myState.value);
+    }
+
+    @Override
+    protected void onSetInitialValue(boolean restorePersistedValue, Object defValue) {
+        if (restorePersistedValue) {
+            mCurrentValue = this.getPersistedString("0000");
+        } else {
+            mCurrentValue = (String) defValue;
+        }
+    }
+
+    private static class SavedState extends BaseSavedState {
+        public static final Parcelable.Creator<SavedState> CREATOR = new Parcelable.Creator<SavedState>() {
+            public SavedState createFromParcel(Parcel in) {
+                return new SavedState(in);
             }
-        } else {
-            Log.i("PasswordActivity", "No intent data discovered.");
+
+            public SavedState[] newArray(int size) {
+                return new SavedState[size];
+            }
+        };
+        String value;
+
+        public SavedState(Parcelable superState) {
+            super(superState);
         }
-    }
 
-    public void acceptPassword(View v) {
-        // Password accept tapped. Read information from fields.
-        serv_stat = true;
-        passwd = (String) tvPass1.getText();
-        finish();
-    }
-
-    public void cancelPassword(View v) {
-        // Cancel tapped. Close dialog and send Unset to prior activity.
-        serv_stat = false;
-        finish();
-    }
-
-    @Override
-    public void finish() {
-        Intent feedback = new Intent();
-        if (serv_stat) {
-            Log.i("Called finish()", "serv_stat is true. Sending password data back to PreferenceFragment");
-            feedback.putExtra("Password", passwd);
-            feedback.putExtra("CryptKey", passwd);
-        } else {
-            Log.i("Called finish()", "serv_stat is false. Sending Unset CryptKey message back to PreferenceFragment");
-            feedback.putExtra("Password", "");
-            feedback.putExtra("CryptKey", "Unset");
+        public SavedState(Parcel source) {
+            super(source);
+            value = source.readString();
         }
-        setResult(RESULT_OK, feedback);
-        super.finish();
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            super.writeToParcel(dest, flags);
+            dest.writeString(value);
+        }
     }
 }

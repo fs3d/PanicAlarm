@@ -5,10 +5,11 @@
             android:key="check_enable_boot"
             android:summary="@string/pref_desc_enable_boot"
             android:title="@string/pref_title_enable_boot" />
-        <SwitchPreference
-            android:defaultValue="false"
-            android:key="check_settings_passwd"
-            android:summary="With this option selected, a password will be used to secure the Panic Service."
-            android:title="Service Password" />
+
+        <com.fs3d.pete_andrews.panicalarm.PasswordActivity
+            android:defaultValue="0000"
+            android:key="pref_key_passwd"
+            android:summary="Ensure that you type your password correctly so it matches."
+            android:title="Please enter a new password" />
     </PreferenceCategory>
 </PreferenceScreen>
