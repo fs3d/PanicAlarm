@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.preference.DialogPreference;
+import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -17,9 +18,11 @@ public class PasswordActivity extends DialogPreference {
     String mCurrentValue, mNewValue;
     Dialog here;
     private EditText passwd1, passwd2;
+    private Context mContext;
 
     public PasswordActivity(Context ctxt, AttributeSet attrs) {
         super(ctxt, attrs);
+        mContext = ctxt;
         setDialogLayoutResource(R.layout.activity_password);
         setPositiveButtonText("Set Password");
         setNegativeButtonText("Cancel");
@@ -28,19 +31,19 @@ public class PasswordActivity extends DialogPreference {
 
     @Override
     protected void onBindDialogView(View vw) {
-        here = getDialog();
-        Log.i("PanicSettingsService", "Call to vw.toString() returned " + vw.toString());
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+        String prefStr = prefs.getString(getKey(), "error");
+        Log.i("PasswordString", "Retrieved " + prefStr);
         try {
             passwd1 = (EditText) vw.findViewById(R.id.et_password1);
             passwd2 = (EditText) vw.findViewById(R.id.et_password2);
         } catch (NullPointerException err) {
             // Something is wrong. The reference to the password fields could not be retrieved.
-            if (here == null) {
-                Log.e("ERRORCATCH", "getDialog has returned null.");
-            } else {
-                Log.e("ERRORCATCH", "Content of getDialog variable: " + here.toString());
-                Log.e("ERRORCATCH", "NullPointerException caused trying to find view via getDialog() reference.");
-            }
+        }
+        if (prefStr.equals("error") || prefStr.equals("null") || prefStr.equals("") || prefStr.equals("0000")) {
+            Log.i("PasswordString", "Retrieved one of the error condition values. Stored password not valid. A new one can be accepted.");
+        } else {
+            Log.i("PasswordString", "Valid password stored. It will need to be entered before it can be changed.");
         }
         super.onBindDialogView(vw);
     }
@@ -49,9 +52,17 @@ public class PasswordActivity extends DialogPreference {
     protected void onDialogClosed(boolean positiveResult) {
         if (!positiveResult)
             return;
-        SharedPreferences.Editor editor = getEditor();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+        SharedPreferences.Editor editor = prefs.edit();
         if (passwd1 != null && passwd2 != null) {
-            editor.putString(getKey(), passwd1.getText().toString());
+            Log.i("PasswordString", "Return String 1 <" + passwd1.getText().toString() + "> Return String 2 <" + passwd2.getText().toString() + ">");
+            if (passwd1.getText().toString().equals(passwd2.getText().toString())) {
+                Log.i("PasswordString", "Strings match.");
+                editor.putString(getKey(), passwd1.getText().toString());
+                editor.commit();
+            } else {
+                Log.w("PasswordString", "String mismatch. Password will not be saved.");
+            }
         }
     }
 

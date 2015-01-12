@@ -1,19 +1,23 @@
 package com.fs3d.pete_andrews.panicalarm;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 
+import java.util.prefs.PreferenceChangeListener;
+
 /** //
  * Created by peteb_000 on 03/01/2015. Further edits pending
  */
-public class PrefsFragmentService extends PreferenceFragment {
+public class PrefsFragmentService extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     public static final String KEY_PREF_PASSWD = "pref_key_passwd";
 
     Preference checkPassword;
+    PreferenceChangeListener chgListener;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,5 +33,19 @@ public class PrefsFragmentService extends PreferenceFragment {
                 return false;
             }
         });
+        checkPassword.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                checkPassword.setSummary("Preference change detected: " + newValue.toString());
+                return false;
+            }
+        });
+    }
+
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals(KEY_PREF_PASSWD)) {
+            Preference key_pass = findPreference(key);
+            key_pass.setSummary(sharedPreferences.getString(key, ""));
+        }
     }
 }
