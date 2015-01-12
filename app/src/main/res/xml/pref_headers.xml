@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
     <header
-        android:fragment="com.fs3d.pete_andrews.panicalarm.PrefsFragmentService"
-        android:summary="@string/pref_header_service_desc"
-        android:title="@string/pref_header_service" />
-    <header
         android:fragment="com.fs3d.pete_andrews.panicalarm.PrefsFragmentComms"
         android:summary="@string/pref_header_communications_desc"
         android:title="@string/pref_header_communications" />

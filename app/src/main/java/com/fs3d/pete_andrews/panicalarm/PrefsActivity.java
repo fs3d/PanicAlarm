@@ -34,11 +34,7 @@ public class PrefsActivity extends PreferenceActivity {
                         if (PrefsFragmentWarnings.class.getName().equals(fragmentName)) {
                             rslt = true;
                         } else {
-                            if (PrefsFragmentService.class.getName().equals(fragmentName)) {
-                                rslt = true;
-                            } else {
-                                rslt = false;
-                            }
+                            rslt = false;
                         }
                     }
                 }

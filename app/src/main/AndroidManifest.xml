@@ -37,9 +37,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.fs3d.pete_andrews.panicalarm.InitActivity" />
         </activity>
-        <activity
-            android:name=".PasswordActivity"
-            android:label="@string/title_activity_password"></activity>
     </application>
 
 </manifest>
