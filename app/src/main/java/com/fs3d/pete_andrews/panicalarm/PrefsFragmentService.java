@@ -11,7 +11,7 @@ import android.preference.PreferenceManager;
  */
 public class PrefsFragmentService extends PreferenceFragment {
 
-    public static final String KEY_PREF_PASSWD = "passworded";
+    public static final String KEY_PREF_PASSWD = "pref_key_passwd";
 
     Preference checkPassword;
     @Override
@@ -22,7 +22,6 @@ public class PrefsFragmentService extends PreferenceFragment {
         final Context ctxt = this.getActivity();
         // Check for password preference so we can launch a dedicated Password Activity from it.
         checkPassword = findPreference(KEY_PREF_PASSWD);
-        checkPassword.setPersistent(true);
         checkPassword.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {

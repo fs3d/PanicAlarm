@@ -7,6 +7,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
@@ -14,6 +15,7 @@ import android.widget.EditText;
 public class PasswordActivity extends DialogPreference {
 
     String mCurrentValue, mNewValue;
+    Dialog here;
     private EditText passwd1, passwd2;
 
     public PasswordActivity(Context ctxt, AttributeSet attrs) {
@@ -26,9 +28,20 @@ public class PasswordActivity extends DialogPreference {
 
     @Override
     protected void onBindDialogView(View vw) {
-        Dialog here = getDialog();
-        passwd1 = (EditText) here.findViewById(R.id.et_password1);
-        passwd1 = (EditText) here.findViewById(R.id.et_password1);
+        here = getDialog();
+        Log.i("PanicSettingsService", "Call to vw.toString() returned " + vw.toString());
+        try {
+            passwd1 = (EditText) vw.findViewById(R.id.et_password1);
+            passwd2 = (EditText) vw.findViewById(R.id.et_password2);
+        } catch (NullPointerException err) {
+            // Something is wrong. The reference to the password fields could not be retrieved.
+            if (here == null) {
+                Log.e("ERRORCATCH", "getDialog has returned null.");
+            } else {
+                Log.e("ERRORCATCH", "Content of getDialog variable: " + here.toString());
+                Log.e("ERRORCATCH", "NullPointerException caused trying to find view via getDialog() reference.");
+            }
+        }
         super.onBindDialogView(vw);
     }
 
@@ -36,13 +49,10 @@ public class PasswordActivity extends DialogPreference {
     protected void onDialogClosed(boolean positiveResult) {
         if (!positiveResult)
             return;
-
-        Dialog here = getDialog();
-        passwd1 = (EditText) here.findViewById(R.id.et_password1);
-        passwd2 = (EditText) here.findViewById(R.id.et_password2);
-
         SharedPreferences.Editor editor = getEditor();
-        editor.putString(getKey(), passwd1.getText().toString());
+        if (passwd1 != null && passwd2 != null) {
+            editor.putString(getKey(), passwd1.getText().toString());
+        }
     }
 
     @Override
