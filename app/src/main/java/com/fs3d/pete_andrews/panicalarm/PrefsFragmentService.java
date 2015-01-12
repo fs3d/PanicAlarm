@@ -42,6 +42,19 @@ public class PrefsFragmentService extends PreferenceFragment implements SharedPr
         });
     }
 
+    public void onResume(Bundle savedInstanceState) {
+        String summaryString;
+        String newValue = findPreference("pref_key_passwd").getSharedPreferences().getString("pref_key_passwd", "null");
+        if (newValue == "null")
+            summaryString = "Password not set.";
+        else if (newValue == "error" || newValue == "0000" || newValue == "")
+            summaryString = "Password does not meet the requirements for security.";
+        else
+            summaryString = "Password has been set.";
+        checkPassword.setSummary("Preference change detected: " + newValue.toString());
+        super.onResume();
+    }
+
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (key.equals(KEY_PREF_PASSWD)) {
             Preference key_pass = findPreference(key);
