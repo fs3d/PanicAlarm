@@ -66,4 +66,9 @@ public class InitActivity extends ActionBarActivity {
         Intent intnt = new Intent(this, DebugMode.class);
         startActivity(intnt);
     }
+
+    public void goSecure(View v) {
+        Intent intnt = new Intent(this, ServiceControl.class);
+        startActivity(intnt);
+    }
 }

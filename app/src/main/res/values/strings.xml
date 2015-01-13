@@ -8,5 +8,6 @@
     <string name="title_activity_debug_mode">DebugMode</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_password">PasswordActivity</string>
+    <string name="title_activity_service_control">Service Configuration</string>
 
 </resources>
