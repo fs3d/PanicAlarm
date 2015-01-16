@@ -10,10 +10,5 @@
         <item>Mimetic Polyalloy</item>
         <item>Destructive Energy</item>
     </string-array>
-    <string-array name="pref_tab_names">
-        <item>Communications</item>
-        <item>Media Collection</item>
-        <item>Location Options</item>
-        <item>Trigger Options</item>
-    </string-array>
+
 </resources>

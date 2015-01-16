@@ -80,26 +80,28 @@ public class PrefsActivity extends ActionBarActivity {
          * fragment.
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
-
-        public PlaceholderFragment() {
-        }
-
         /**
          * Returns a new instance of this fragment for the given section
          * number.
          */
+        static int fragselect;
+
+        public PlaceholderFragment() {
+        }
+
         public static PlaceholderFragment newInstance(int sectionNumber) {
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
             fragment.setArguments(args);
+            fragselect = (R.layout.frag_pref_5comms);
             return fragment;
         }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_prefs, container, false);
+            View rootView = inflater.inflate(fragselect, container, false);
             return rootView;
         }
     }
@@ -118,13 +120,20 @@ public class PrefsActivity extends ActionBarActivity {
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
+            switch (position) {
+                case 0:
+                    // No Op until fragments have been built.
+                case 1:
+                    // No op until fragments have been built.
+            }
+            // Below line to be replaced with placeholder fragment if none has been returned yet.
             return PlaceholderFragment.newInstance(position + 1);
         }
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
-            return 3;
+            // Show 5 total pages.
+            return 5;
         }
 
         @Override
@@ -137,6 +146,10 @@ public class PrefsActivity extends ActionBarActivity {
                     return getString(R.string.title_section2).toUpperCase(l);
                 case 2:
                     return getString(R.string.title_section3).toUpperCase(l);
+                case 3:
+                    return getString(R.string.title_section4).toUpperCase(l);
+                case 4:
+                    return getString(R.string.title_section5).toUpperCase(l);
             }
             return null;
         }

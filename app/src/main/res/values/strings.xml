@@ -5,13 +5,15 @@
     <string name="splash_title">Panic Alarm vx.xx.xxx</string>
     <string name="splash_message">Copyright message goes here.</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_debug_mode">DebugMode</string>
+    <string name="title_activity_debug_mode">Debug Mode</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_password">PasswordActivity</string>
     <string name="title_activity_service_control">Service Configuration</string>
-    <string name="title_activity_prefs">PrefsActivity</string>
-    <string name="title_section1">Section 1</string>
-    <string name="title_section2">Section 2</string>
-    <string name="title_section3">Section 3</string>
+    <string name="title_activity_prefs">Settings</string>
+    <string name="title_section1">Alarms / SOS</string>
+    <string name="title_section2">Location settings</string>
+    <string name="title_section3">Triggers</string>
+    <string name="title_section4">Capture settings</string>
+    <string name="title_section5">Communications</string>
 
 </resources>
