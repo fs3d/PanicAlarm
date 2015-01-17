@@ -25,6 +25,7 @@ public class PrefsActivity extends ActionBarActivity {
      * may be best to switch to a
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
+    static int fragselect;
     SectionsPagerAdapter mSectionsPagerAdapter;
 
     /**
@@ -84,7 +85,6 @@ public class PrefsActivity extends ActionBarActivity {
          * Returns a new instance of this fragment for the given section
          * number.
          */
-        static int fragselect;
 
         public PlaceholderFragment() {
         }
@@ -94,7 +94,6 @@ public class PrefsActivity extends ActionBarActivity {
             Bundle args = new Bundle();
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
             fragment.setArguments(args);
-            fragselect = (R.layout.frag_pref_5comms);
             return fragment;
         }
 
@@ -102,6 +101,118 @@ public class PrefsActivity extends ActionBarActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(fragselect, container, false);
+            return rootView;
+        }
+    }
+
+    // Below follow 5 fragments, 1 for each page of settings.
+
+    public static class AlertsFragment extends Fragment {
+        private static final String ARG_SECTION_NUMBER = "section_number";
+
+        public AlertsFragment() {
+        }
+
+        public static AlertsFragment newInstance(int sectionNumber) {
+            AlertsFragment fragment = new AlertsFragment();
+            Bundle args = new Bundle();
+            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            fragment.setArguments(args);
+            return fragment;
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.frag_pref_1alerts, container, false);
+            return rootView;
+        }
+    }
+
+    public static class LocationFragment extends Fragment {
+        private static final String ARG_SECTION_NUMBER = "section_number";
+
+        public LocationFragment() {
+        }
+
+        public static LocationFragment newInstance(int sectionNumber) {
+            LocationFragment fragment = new LocationFragment();
+            Bundle args = new Bundle();
+            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            fragment.setArguments(args);
+            return fragment;
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.frag_pref_2location, container, false);
+            return rootView;
+        }
+    }
+
+    public static class TriggerFragment extends Fragment {
+        private static final String ARG_SECTION_NUMBER = "section_number";
+
+        public TriggerFragment() {
+        }
+
+        public static TriggerFragment newInstance(int sectionNumber) {
+            TriggerFragment fragment = new TriggerFragment();
+            Bundle args = new Bundle();
+            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            fragment.setArguments(args);
+            return fragment;
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.frag_pref_3triggers, container, false);
+            return rootView;
+        }
+    }
+
+    public static class CaptureFragment extends Fragment {
+        private static final String ARG_SECTION_NUMBER = "section_number";
+
+        public CaptureFragment() {
+        }
+
+        public static CaptureFragment newInstance(int sectionNumber) {
+            CaptureFragment fragment = new CaptureFragment();
+            Bundle args = new Bundle();
+            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            fragment.setArguments(args);
+            return fragment;
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.frag_pref_4capture, container, false);
+            return rootView;
+        }
+    }
+
+    public static class CommsFragment extends Fragment {
+        private static final String ARG_SECTION_NUMBER = "section_number";
+
+        public CommsFragment() {
+        }
+
+        public static CommsFragment newInstance(int sectionNumber) {
+            CommsFragment fragment = new CommsFragment();
+            Bundle args = new Bundle();
+            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            fragment.setArguments(args);
+            return fragment;
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.frag_pref_5comms, container, false);
             return rootView;
         }
     }
@@ -122,12 +233,18 @@ public class PrefsActivity extends ActionBarActivity {
             // Return a PlaceholderFragment (defined as a static inner class below).
             switch (position) {
                 case 0:
-                    // No Op until fragments have been built.
+                    return new AlertsFragment();
                 case 1:
-                    // No op until fragments have been built.
+                    return new LocationFragment();
+                case 2:
+                    return new TriggerFragment();
+                case 3:
+                    return new CaptureFragment();
+                case 4:
+                    return new CommsFragment();
             }
             // Below line to be replaced with placeholder fragment if none has been returned yet.
-            return PlaceholderFragment.newInstance(position + 1);
+            return null;
         }
 
         @Override
