@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="Alerts and SOS Settings"
+        android:text="Communication settings"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <LinearLayout
@@ -61,10 +61,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal">
+        android:gravity="center">
 
-        <TextView
+    <TextView
             android:id="@+id/tv_alarm3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -80,12 +79,5 @@
             android:max="100"
             android:progress="50" />
     </LinearLayout>
-
-    <NumberPicker
-        android:id="@+id/numberPicker"
-        android:layout_width="108dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:orientation="horizontal" />
 
 </LinearLayout>
