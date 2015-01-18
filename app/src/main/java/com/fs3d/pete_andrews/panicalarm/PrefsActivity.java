@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.Locale;
 
@@ -72,6 +73,32 @@ public class PrefsActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void toggleSwitch(View v){
+        TextView tvdbg = (TextView) findViewById(R.id.tv_debug_report);
+        switch (v.getId()) {
+            case R.id.btn_enable_gps:
+                // Enable GPS switch.
+                tvdbg.setText("User tapped enable GPS");
+                break;
+            case R.id.btn_gps_standby:
+                // Enable GPS in vigilance mode (allows quicker location fix in event of a panic)
+                tvdbg.setText("User tapped enable GPS Vigilance");
+                break;
+            case R.id.btn_gps_move:
+                // Enable GPS update via move.
+                // In vigilance mode, the user sets the distance interval.
+                // In panic mode, the interval is updated if any change is detected no matter how small.
+                tvdbg.setText("User tapped GPS Distance Check");
+                break;
+            default:
+                // This is for any condition I have not written a case statement for yet.
+                tvdbg.setText("User tapped an unallocated control");
+        }
+        ;
+    }
+
+    // Below follow 5 fragments, 1 for each page of settings.
+
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -81,6 +108,7 @@ public class PrefsActivity extends ActionBarActivity {
          * fragment.
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
+
         /**
          * Returns a new instance of this fragment for the given section
          * number.
@@ -104,8 +132,6 @@ public class PrefsActivity extends ActionBarActivity {
             return rootView;
         }
     }
-
-    // Below follow 5 fragments, 1 for each page of settings.
 
     public static class AlertsFragment extends Fragment {
         private static final String ARG_SECTION_NUMBER = "section_number";
@@ -216,6 +242,8 @@ public class PrefsActivity extends ActionBarActivity {
             return rootView;
         }
     }
+
+    // Methods connected to clickables goes here. Some are to be combined to handle multiple click events.
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
