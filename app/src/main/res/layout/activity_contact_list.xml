@@ -1,0 +1,38 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.fs3d.pete_andrews.panicalarm.ContactListActivity">
+
+    <TextView
+        android:id="@+id/tv_title_contacts"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/title_contact_list"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.DialogWindowTitle" />
+
+    <ListView
+        android:id="@+id/contactListView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="1"
+        android:background="#7f00005f"
+        android:choiceMode="singleChoice"
+        android:paddingBottom="@dimen/abc_control_padding_material"
+        android:paddingLeft="@dimen/abc_control_padding_material"
+        android:paddingRight="@dimen/abc_control_padding_material"
+        android:paddingTop="@dimen/abc_control_padding_material"
+        android:theme="@style/Base.TextAppearance.AppCompat.Inverse" />
+
+    <Button
+        android:id="@+id/btn_exit_contact_mgr"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:text="@string/btn_exit_contact_mgr" />
+
+</LinearLayout>

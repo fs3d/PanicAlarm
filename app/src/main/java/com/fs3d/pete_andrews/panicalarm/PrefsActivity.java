@@ -81,7 +81,7 @@ public class PrefsActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void toggleSwitch(View v){
+    public void toggleSwitch(View v) {
         TextView tvdbg = (TextView) findViewById(R.id.tv_debug_report);
         switch (v.getId()) {
             case R.id.btn_enable_gps:
@@ -107,12 +107,17 @@ public class PrefsActivity extends ActionBarActivity {
 
     // Below follow 5 fragments, 1 for each page of settings.
 
-    public void pickContact(View v){
+    public void pickContact(View v) {
         Intent intnt = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
         startActivityForResult(intnt, 1);
     }
 
-    public void onActivityResult(int reqCode, int resultCode, Intent data){
+    public void manageContacts(View v) {
+        // Call a separate activity to manage contacts. No result needs to be returned as all the
+        // work is done in the new activity.
+    }
+
+    public void onActivityResult(int reqCode, int resultCode, Intent data) {
         super.onActivityResult(reqCode, resultCode, data);
         String name = "";
         switch (reqCode) {
@@ -136,8 +141,8 @@ public class PrefsActivity extends ActionBarActivity {
                             c.close();
                         }
                         Log.w("Contact Retrieval", "Retrieved: " + name);
-                        TextView reportContact = (TextView) findViewById(R.id.tv_pager_status);
-                        reportContact.setText("Retrieved: " + name);
+                        // Underneath this comment, add a call to a contact manager to add the
+                        // selected contact to the Panic List.
                     }
                     break;
                 }

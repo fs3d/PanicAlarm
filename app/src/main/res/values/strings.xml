@@ -15,5 +15,8 @@
     <string name="title_section3">Triggers</string>
     <string name="title_section4">Capture settings</string>
     <string name="title_section5">Communications</string>
+    <string name="title_activity_contact_list">ContactListActivity</string>
+    <string name="title_contact_list">Current Panic Contacts</string>
+    <string name="btn_exit_contact_mgr">Exit contact manager</string>
 
 </resources>
