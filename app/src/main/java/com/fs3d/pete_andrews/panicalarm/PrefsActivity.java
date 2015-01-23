@@ -1,17 +1,12 @@
 package com.fs3d.pete_andrews.panicalarm;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -108,45 +103,15 @@ public class PrefsActivity extends ActionBarActivity {
     // Below follow 5 fragments, 1 for each page of settings.
 
     public void pickContact(View v) {
-        Intent intnt = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-        startActivityForResult(intnt, 1);
+        // Call Contacts Manager to process this request.
+        new ContactListActivity().FetchContact();
     }
 
     public void manageContacts(View v) {
         // Call a separate activity to manage contacts. No result needs to be returned as all the
         // work is done in the new activity.
-    }
-
-    public void onActivityResult(int reqCode, int resultCode, Intent data) {
-        super.onActivityResult(reqCode, resultCode, data);
-        String name = "";
-        switch (reqCode) {
-            case (1):
-                if (resultCode == Activity.RESULT_OK) {
-                    Uri contactData = data.getData();
-                    Cursor c = null;
-                    try {
-                        // The following line retrieves the contact supplied from the Contacts Picker as a query result.
-                        // This is done using Reflection.
-                        c = getContentResolver().query(contactData, new String[]{ContactsContract.Contacts.DISPLAY_NAME}, null, null, null);
-                        if (c.moveToFirst()) {
-                            name = c.getString(c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-
-                        }
-                    } catch (Exception e) {
-                        // No op.
-                        name = "Failed to retrieve contact.";
-                    } finally {
-                        if (c != null) {
-                            c.close();
-                        }
-                        Log.w("Contact Retrieval", "Retrieved: " + name);
-                        // Underneath this comment, add a call to a contact manager to add the
-                        // selected contact to the Panic List.
-                    }
-                    break;
-                }
-        }
+        Intent conMgr = new Intent(this, ContactListActivity.class);
+        startActivity(conMgr);
     }
 
     /**

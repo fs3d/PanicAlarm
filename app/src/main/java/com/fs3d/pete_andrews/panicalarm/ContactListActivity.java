@@ -1,7 +1,13 @@
 package com.fs3d.pete_andrews.panicalarm;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -45,6 +51,53 @@ public class ContactListActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    public void FetchContact() {
+        Intent i = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+        startActivityForResult(i, 101);
+    }
+
+    /*
+     * Below this line is the onActivityResult method to determine what to do when a system-based
+     * activity returns data to be processed. Currently it only houses the handling code for
+     * data returned by the contact picker activity, which is all that's needed in this activity.
+     */
+
+    public void onActivityResult(int reqCode, int resultCode, Intent data) {
+        super.onActivityResult(reqCode, resultCode, data);
+        String name = "";
+        switch (reqCode) {
+            case (101):
+                if (resultCode == Activity.RESULT_OK) {
+                    Uri contactData = data.getData();
+                    Cursor c = null;
+                    try {
+                        // The following line retrieves the contact supplied from the Contacts Picker as a query result.
+                        // This is done using Reflection.
+                        c = getContentResolver().query(contactData, new String[]{ContactsContract.Contacts.DISPLAY_NAME}, null, null, null);
+                        if (c.moveToFirst()) {
+                            name = c.getString(c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                            int numentries = c.getCount();
+                            Log.i("ContactManagement", "returned " + String.valueOf(numentries) + " top-level records.");
+                            int numcols = c.getColumnCount();
+                            Log.i("ContactManagement", "returned " + String.valueOf(numcols) + " columns in current record.");
+                        }
+                    } catch (Exception e) {
+                        // No op.
+                        e.printStackTrace();
+                        name = "Failed to retrieve contact. Check the Stack Trace for details.";
+                    } finally {
+                        if (c != null) {
+                            c.close();
+                        }
+                        Log.w("Contact Retrieval", "Retrieved: " + name);
+                    }
+                    break;
+                }
+        }
+    }
+
+    // The last method in this class is the exit method to close the manager on user request.
 
     public void exitContactMgr(View v) {
         finish();
