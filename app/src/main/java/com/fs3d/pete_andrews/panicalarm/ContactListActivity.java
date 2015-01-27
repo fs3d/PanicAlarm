@@ -72,6 +72,7 @@ public class ContactListActivity extends ActionBarActivity {
     public void onActivityResult(int reqCode, int resultCode, Intent data) {
         super.onActivityResult(reqCode, resultCode, data);
         String name = "";
+        String phonenum;
         switch (reqCode) {
             case (101):
                 if (resultCode == Activity.RESULT_OK) {
@@ -80,10 +81,17 @@ public class ContactListActivity extends ActionBarActivity {
                     try {
                         // The following line retrieves the contact supplied from the Contacts Picker as a query result.
                         // This is done using Reflection. It can also be done using projection.
-                        c = getContentResolver().query(contactData, new String[]{ContactsContract.Contacts.DISPLAY_NAME}, null, null, null);
+                        c = getContentResolver().query(contactData, new String[]{
+                                ContactsContract.CommonDataKinds.Phone.NUMBER
+                        }, null, null, null);
                         if (c.moveToFirst()) {
+                            String columns[] = c.getColumnNames();
+                            for (String column : columns) {
+                                int index = c.getColumnIndex(column);
+                                Log.i("Column Parser", "Column: " + column + " == [" + c.getString(index) + "]");
+                            }
                             name = c.getString(c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                            String phonenum = c.getString(c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                            phonenum = c.getString(c.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
                             int numentries = c.getCount();
                             Log.i("ContactManagement", "returned " + String.valueOf(numentries) + " top-level records.");
                             Log.i("ContactManagement", "returned " + phonenum);
@@ -98,7 +106,7 @@ public class ContactListActivity extends ActionBarActivity {
                         if (c != null) {
                             c.close();
                         }
-                        Log.w("Contact Retrieval", "Retrieved: " + name);
+                        Log.w("Contact Retrieval", name);
                     }
                     break;
                 }
