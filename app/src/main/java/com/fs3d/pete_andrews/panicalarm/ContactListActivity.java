@@ -24,6 +24,12 @@ public class ContactListActivity extends ActionBarActivity {
          * If an Add argument is passed, process the incoming data and then return control to
          * the activity that started this one.
          **/
+        String args = getIntent().getStringExtra("args");
+        if (args.equals("add")) {
+            FetchContact();
+        } else if (args.equals("mgr")) {
+            // Manage contacts from here.
+        }
     }
 
 
@@ -73,19 +79,21 @@ public class ContactListActivity extends ActionBarActivity {
                     Cursor c = null;
                     try {
                         // The following line retrieves the contact supplied from the Contacts Picker as a query result.
-                        // This is done using Reflection.
+                        // This is done using Reflection. It can also be done using projection.
                         c = getContentResolver().query(contactData, new String[]{ContactsContract.Contacts.DISPLAY_NAME}, null, null, null);
                         if (c.moveToFirst()) {
                             name = c.getString(c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                            String phonenum = c.getString(c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                             int numentries = c.getCount();
                             Log.i("ContactManagement", "returned " + String.valueOf(numentries) + " top-level records.");
+                            Log.i("ContactManagement", "returned " + phonenum);
                             int numcols = c.getColumnCount();
                             Log.i("ContactManagement", "returned " + String.valueOf(numcols) + " columns in current record.");
                         }
                     } catch (Exception e) {
                         // No op.
                         e.printStackTrace();
-                        name = "Failed to retrieve contact. Check the Stack Trace for details.";
+                        name = "[EXCEPTION CAUGHT] " + e.toString();
                     } finally {
                         if (c != null) {
                             c.close();

@@ -104,14 +104,36 @@ public class PrefsActivity extends ActionBarActivity {
 
     public void pickContact(View v) {
         // Call Contacts Manager to process this request.
-        new ContactListActivity().FetchContact();
+        Intent conMgr = new Intent(this, ContactListActivity.class);
+        conMgr.putExtra("args", "add");
+        startActivityForResult(conMgr, 101);
     }
 
     public void manageContacts(View v) {
         // Call a separate activity to manage contacts. No result needs to be returned as all the
         // work is done in the new activity.
         Intent conMgr = new Intent(this, ContactListActivity.class);
-        startActivity(conMgr);
+        conMgr.putExtra("args", "manage");
+        startActivityForResult(conMgr, 102);
+    }
+
+    /*
+     * Activity Result Checker - Useful to update panels if needed.
+     */
+
+    public void onActivityResult(int reqCode, int resCode, Intent data) {
+        super.onActivityResult(reqCode, resCode, data);
+        switch (reqCode) {
+            case (101):
+                // No op - Add contact
+                break;
+            case (102):
+                // No op - Manage contacts
+                break;
+            default:
+                // All other cases
+                break;
+        }
     }
 
     /**
