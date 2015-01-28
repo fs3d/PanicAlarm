@@ -5,16 +5,20 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
+import android.provider.ContactsContract.CommonDataKinds;
+import android.provider.ContactsContract.Contacts;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import java.util.ArrayList;
+
 
 public class ContactListActivity extends ActionBarActivity {
 
+    public ArrayList<String> SecureContactList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,10 +63,106 @@ public class ContactListActivity extends ActionBarActivity {
     }
 
     public void FetchContact() {
-        Intent i = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+        Intent i = new Intent(Intent.ACTION_PICK, Contacts.CONTENT_URI);
         startActivityForResult(i, 101);
     }
 
+    public String[] PullContactID(Uri contactData) {
+        String[] con_id = new String[2];
+        Cursor c = null; // For retrieval of ID from Contact Picker Activity
+        try {
+            // The following line retrieves the contact supplied from the Contacts Picker as a query result.
+            // This is done using Reflection. It can also be done using projection.
+            c = getContentResolver().query(contactData, null, null, null, null);
+            if (c.moveToFirst()) {
+                con_id[0] = c.getString(c.getColumnIndexOrThrow(Contacts._ID));
+                con_id[1] = c.getString(c.getColumnIndex(Contacts.DISPLAY_NAME));
+            }
+        } catch (Exception e) {
+            // No op.
+            e.printStackTrace();
+            con_id[0] = "NO_DATA";
+        } finally {
+            if (c != null) {
+                c.close();
+            }
+        }
+        return con_id;
+    }
+
+    public String[] PullPhoneNumbers(String contact_id) {
+        Cursor phonesearch = null; // For search and access of phone data
+        String phoneNumber;
+        String[] phoneNumbers = new String[]{"NO_DATA"};
+        try {
+            String[] projection = new String[]{
+                    CommonDataKinds.Phone.DISPLAY_NAME,
+                    CommonDataKinds.Phone.NUMBER,
+                    CommonDataKinds.Phone.MIMETYPE
+            };
+            Log.i("PullPhoneNumbers", "String passed to contact_id is " + contact_id);
+            phonesearch = getContentResolver().query(CommonDataKinds.Phone.CONTENT_URI,
+                    projection,
+                    CommonDataKinds.Phone.CONTACT_ID + " = " + contact_id,
+                    null, null);
+            if (phonesearch.moveToFirst()) {
+                int phnumber = phonesearch.getColumnIndex(CommonDataKinds.Phone.NUMBER);
+                phoneNumbers = new String[phonesearch.getCount()];
+                int i = 0;
+                do {
+                    // Add phone number to String array
+                    phoneNumber = phonesearch.getString(phnumber);
+                    Log.w("Data Retrieval", "Phone Number: " + phoneNumber);
+                    phoneNumbers[i] = phoneNumber;
+                    i++;
+                } while (phonesearch.moveToNext());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            phonesearch.close();
+            return phoneNumbers;
+        }
+    }
+
+    public String[] PullEmailAddresses(String contact_id) {
+        Cursor mailsearch = null; // For search and access of phone data
+        String email;
+        String[] emails = new String[]{"NO_DATA"};
+        try {
+            String[] projection = new String[]{
+                    CommonDataKinds.Phone.DISPLAY_NAME,
+                    CommonDataKinds.Phone.NUMBER,
+                    CommonDataKinds.Phone.MIMETYPE
+            };
+            Log.i("PullPhoneNumbers", "String passed to contact_id is " + contact_id);
+            mailsearch = getContentResolver().query(CommonDataKinds.Email.CONTENT_URI,
+                    projection,
+                    CommonDataKinds.Email.CONTACT_ID + " = " + contact_id,
+                    null, null);
+            if (mailsearch.moveToFirst()) {
+                int address = mailsearch.getColumnIndex(CommonDataKinds.Email.ADDRESS);
+                emails = new String[mailsearch.getCount()];
+                int i = 0;
+                do {
+                    // Add phone number to String array
+                    email = mailsearch.getString(address);
+                    Log.w("Data Retrieval", "" + "Email Address: " + email);
+                    emails[i] = email;
+                    i++;
+                } while (mailsearch.moveToNext());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            mailsearch.close();
+            return emails;
+        }
+    }
+
+    public void AddToContactList(String contact_id, String[] numbers, String[] emails) {
+        // Append the latest contact to the Array List.
+    }
     /*
      * Below this line is the onActivityResult method to determine what to do when a system-based
      * activity returns data to be processed. Currently it only houses the handling code for
@@ -71,44 +171,34 @@ public class ContactListActivity extends ActionBarActivity {
 
     public void onActivityResult(int reqCode, int resultCode, Intent data) {
         super.onActivityResult(reqCode, resultCode, data);
-        String name = "";
-        String phonenum;
         switch (reqCode) {
             case (101):
                 if (resultCode == Activity.RESULT_OK) {
-                    Uri contactData = data.getData();
-                    Cursor c = null;
-                    try {
-                        // The following line retrieves the contact supplied from the Contacts Picker as a query result.
-                        // This is done using Reflection. It can also be done using projection.
-                        c = getContentResolver().query(contactData, new String[]{
-                                ContactsContract.CommonDataKinds.Phone.NUMBER
-                        }, null, null, null);
-                        if (c.moveToFirst()) {
-                            String columns[] = c.getColumnNames();
-                            for (String column : columns) {
-                                int index = c.getColumnIndex(column);
-                                Log.i("Column Parser", "Column: " + column + " == [" + c.getString(index) + "]");
-                            }
-                            name = c.getString(c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                            phonenum = c.getString(c.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
-                            int numentries = c.getCount();
-                            Log.i("ContactManagement", "returned " + String.valueOf(numentries) + " top-level records.");
-                            Log.i("ContactManagement", "returned " + phonenum);
-                            int numcols = c.getColumnCount();
-                            Log.i("ContactManagement", "returned " + String.valueOf(numcols) + " columns in current record.");
+                    Uri cData = data.getData();
+                    // We need the ID for the selected contact to perform subsequent searches.
+                    String[] con_id = PullContactID(cData);
+                    // Now we have the ID for the selected contact, we can use it to pull in the other database entries.
+                    if (!con_id[0].equals("NO_DATA")) {
+                        Log.i("Activity Result", "Contact name returned is " + con_id[1]);
+                        String[] numberList = PullPhoneNumbers(con_id[0]);
+                        if (numberList[0].equals("NO_DATA")) {
+                            Log.i("Activity Result", "No phone number entries for this contact.");
+                        } else {
+                            Log.i("Activity Result", "There are " + String.valueOf(numberList.length) + " entries for this contact.");
                         }
-                    } catch (Exception e) {
-                        // No op.
-                        e.printStackTrace();
-                        name = "[EXCEPTION CAUGHT] " + e.toString();
-                    } finally {
-                        if (c != null) {
-                            c.close();
+                        // Now we will use the ID to pull the email addresses.
+                        String[] emailList = PullEmailAddresses(con_id[0]);
+                        if (emailList[0].equals("NO_DATA")) {
+                            Log.i("Activity Result", "No email address entries for this contact.");
+                        } else {
+                            Log.i("Activity Result", "There are " + String.valueOf(emailList.length) + " entries for this contact.");
                         }
-                        Log.w("Contact Retrieval", name);
+                        // Now we have all the information we need, it's time to populate the
+                        // Contact Manager.
+                        AddToContactList(con_id[1], numberList, emailList);
+                    } else {
+                        Log.e("Activity Result", "There was a problem retrieving the contact.");
                     }
-                    break;
                 }
         }
     }
