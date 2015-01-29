@@ -15,10 +15,9 @@ import android.view.View;
 
 import java.util.ArrayList;
 
-
 public class ContactListActivity extends ActionBarActivity {
 
-    public ArrayList<String> SecureContactList;
+    public ArrayList<ArrayList<String>> SecureContactList = new ArrayList<ArrayList<String>>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -162,6 +161,8 @@ public class ContactListActivity extends ActionBarActivity {
 
     public void AddToContactList(String contact_id, String[] numbers, String[] emails) {
         // Append the latest contact to the Array List.
+        SecureContactList.add(new ArrayList<String>());
+        SecureContactList.get(0).add(contact_id);
     }
     /*
      * Below this line is the onActivityResult method to determine what to do when a system-based
@@ -195,6 +196,7 @@ public class ContactListActivity extends ActionBarActivity {
                         }
                         // Now we have all the information we need, it's time to populate the
                         // Contact Manager.
+                        Log.i("Activity Result", "Calling AddToContactList...");
                         AddToContactList(con_id[1], numberList, emailList);
                     } else {
                         Log.e("Activity Result", "There was a problem retrieving the contact.");
