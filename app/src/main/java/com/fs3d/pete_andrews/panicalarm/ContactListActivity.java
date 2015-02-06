@@ -1,10 +1,10 @@
 package com.fs3d.pete_andrews.panicalarm;
 
 import android.app.Activity;
-import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract.CommonDataKinds;
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 public class ContactListActivity extends ActionBarActivity {
 
-    public ArrayList<ArrayList<String>> SecureContactList = new ArrayList<ArrayList<String>>();
+    public ArrayList<ArrayList<String>> SecureContactList = new ArrayList<>();
 
     public String id, contact_id, display_name, data_category, data_value;
     @Override
@@ -76,22 +76,23 @@ public class ContactListActivity extends ActionBarActivity {
 
     public String[] PullContactID(Uri contactData) {
         String[] con_id = new String[2];
-        Cursor c = null; // For retrieval of ID from Contact Picker Activity
+        Cursor con = null; // For retrieval of ID from Contact Picker Activity
         try {
             // The following line retrieves the contact supplied from the Contacts Picker as a query result.
             // This is done using Reflection. It can also be done using projection.
-            c = getContentResolver().query(contactData, null, null, null, null);
-            if (c.moveToFirst()) {
-                con_id[0] = c.getString(c.getColumnIndexOrThrow(Contacts._ID));
-                con_id[1] = c.getString(c.getColumnIndex(Contacts.DISPLAY_NAME));
+            con = getContentResolver().query(contactData, null, null, null, null);
+            if (con.moveToFirst()) {
+                con_id[0] = con.getString(con.getColumnIndexOrThrow(Contacts._ID));
+                con_id[1] = con.getString(con.getColumnIndex(Contacts.DISPLAY_NAME));
             }
         } catch (Exception e) {
-            // No op.
+            // No op. If this has come back as a result of a valid contact selection, then something
+            // has seriously gone wrong somewhere. We need a Stack Trace.
             e.printStackTrace();
             con_id[0] = "NO_DATA";
         } finally {
-            if (c != null) {
-                c.close();
+            if (con != null) {
+                con.close(); // Close the connection to the Contact List so we don't leak memory.
             }
         }
         return con_id;
@@ -168,46 +169,43 @@ public class ContactListActivity extends ActionBarActivity {
     }
 
     public void OpenDatabase() {
-        // Opens the DB in read-only mode to populate an ArrayList of contacts.
+        // Opens the DB in read-only mode. An ArrayAdapter will be built directly from this.
         StorageHelper mHelper = new StorageHelper(this);
         SQLiteDatabase db = mHelper.getReadableDatabase();
+        String sortOrder = StorageHelper.PersonEntry.COLUMN_NAME_UID + " DESC";
+        Cursor cc, cp;
+        try {
+            // Person entry first.
+            cc = db.query(StorageHelper.PersonEntry.TABLE_NAME, null, null, null, null, null, sortOrder);
+            cc.moveToFirst();
+            cp = db.query(StorageHelper.ContactEntry.TABLE_NAME, null, null, null, null, null, null);
+            cp.moveToFirst();
+        } catch (SQLiteException e) {
+            // Exception thrown trying to query database.
+            createTables();
+            cc = db.query(StorageHelper.PersonEntry.TABLE_NAME, null, null, null, null, null, sortOrder);
+            cc.moveToFirst();
+            cp = db.query(StorageHelper.ContactEntry.TABLE_NAME, null, null, null, null, null, null);
+            cp.moveToFirst();
+        }
 
-        String sortOrder = StorageHelper.ContactEntry.COLUMN_NAME_CONTACT_ID + " DESC";
-
-        Cursor c = db.query(StorageHelper.ContactEntry.TABLE_NAME, null, null, null, null, null, sortOrder);
-        c.moveToFirst();
         int locindx = 0;
         int topindx = 0;
         String name = "";
         String prevtype = "_NAME";
-        ArrayList<String> nums = new ArrayList<String>();
-        ArrayList<String> mails = new ArrayList<String>();
+        ArrayList<ArrayList<String>> contacts = new ArrayList<>();
         do {
-            String itemId = c.getString(c.getColumnIndexOrThrow(StorageHelper.ContactEntry.COLUMN_NAME_UID));
-            String con_id = c.getString(c.getColumnIndexOrThrow(StorageHelper.ContactEntry.COLUMN_NAME_CONTACT_ID));
-            String dispname = c.getString(c.getColumnIndexOrThrow(StorageHelper.ContactEntry.COLUMN_DISPLAY_NAME));
-            String dataval = c.getString(c.getColumnIndexOrThrow(StorageHelper.ContactEntry.COLUMN_DATA_FIELD));
-            String datatype = c.getString(c.getColumnIndexOrThrow(StorageHelper.ContactEntry.COLUMN_DATA_CATEGORY));
-            if (datatype.equals("NUMBER")) {
-                if (prevtype.equals("_NAME")) {
-                    nums.add("_NUMBERS");
-                    prevtype = "_NUMBERS";
-                }
-                nums.add(dataval);
-            } else if (datatype.equals("EMAIL")) {
-                if (prevtype.equals("_NUMBERS")) {
-                    mails.add("_MAILS");
-                }
-                mails.add(dataval);
-            }
-            locindx++;
-            if (!dispname.equals(name)) {
-                // Names are different, time to make a new entry.
-                name = dispname;
-                locindx = 0;
-                topindx++;
-            }
-        } while (c.moveToNext());
+            String itemId = cp.getString(cp.getColumnIndexOrThrow(StorageHelper.PersonEntry.COLUMN_NAME_UID));
+            String per_id = cp.getString(cp.getColumnIndexOrThrow(StorageHelper.PersonEntry.COLUMN_NAME_CONTACT_ID));
+            String dispname = cp.getString(cp.getColumnIndexOrThrow(StorageHelper.PersonEntry.COLUMN_DISPLAY_NAME));
+            // The above lines reference the persons table. The top level ArrayList is built from this.
+            do {
+                String con_id = cc.getString(cc.getColumnIndexOrThrow(StorageHelper.ContactEntry.COLUMN_NAME_CONTACT_ID));
+                String dataval = cc.getString(cc.getColumnIndexOrThrow(StorageHelper.ContactEntry.COLUMN_DATA_FIELD));
+                String datatype = cc.getString(cc.getColumnIndexOrThrow(StorageHelper.ContactEntry.COLUMN_DATA_CATEGORY));
+                // The above 3 lines reference the contactable table. The 2nd dimension ArrayList is built from this.
+            } while (cc.moveToNext());
+        } while (cp.moveToNext());
     }
 
     public void AddToContactList(String contact_id, String[] numbers, String[] emails) {
@@ -230,24 +228,27 @@ public class ContactListActivity extends ActionBarActivity {
         // ArrayList of contacts.
     }
 
-    public void commitData() {
-        // This method will commit the data changes to the Database, overwriting the old one.
-        // We can do this because this activity pulls the existing DB changes and populates an
-        // ArrayList with the current data before any changes are made.
+    public void createTables() {
+        // Creates the contact tables if they don't already exist. Person Entry first.
         StorageHelper mHelper = new StorageHelper(this);
         SQLiteDatabase db = mHelper.getWritableDatabase();
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + StorageHelper.PersonEntry.TABLE_NAME + "(" +
+                StorageHelper.PersonEntry.COLUMN_NAME_UID + "INT PRIMARY KEY," +
+                StorageHelper.PersonEntry.COLUMN_NAME_CONTACT_ID + " TEXT," +
+                StorageHelper.PersonEntry.COLUMN_DISPLAY_NAME + " TEXT)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + StorageHelper.ContactEntry.TABLE_NAME + "(" +
+                StorageHelper.ContactEntry.COLUMN_NAME_CONTACT_ID + " TEXT," +
+                StorageHelper.ContactEntry.COLUMN_DATA_CATEGORY + " TEXT," +
+                StorageHelper.ContactEntry.COLUMN_DATA_FIELD + " TEXT)");
+    }
 
-        ContentValues values = new ContentValues();
-        values.put(StorageHelper.ContactEntry.COLUMN_NAME_UID, id);
-        values.put(StorageHelper.ContactEntry.COLUMN_NAME_CONTACT_ID, contact_id);
-        values.put(StorageHelper.ContactEntry.COLUMN_DISPLAY_NAME, display_name);
-        values.put(StorageHelper.ContactEntry.COLUMN_DATA_CATEGORY, data_category);
-        values.put(StorageHelper.ContactEntry.COLUMN_DATA_FIELD, data_value);
+    public void commitData() {
+        // This method will commit the data changes to the Database tables.
+        // First, the Person table. This will only need to be updated with additions and deletions
+        // from the Contact List. Changes to contact data for each person does not affect this table.
 
-        long newRowId;
-        newRowId = db.insert(StorageHelper.ContactEntry.TABLE_NAME,
-                StorageHelper.ContactEntry.COLUMN_NAME_CONTACT_ID,
-                values);
+        // Now the Contactables table. This will need updating for every contactable change
+        // (e.g. adding or removing a contact type like an email or phone number).
     }
     /*
      * Below this line is the onActivityResult method to determine what to do when a system-based
@@ -263,14 +264,19 @@ public class ContactListActivity extends ActionBarActivity {
                     Uri cData = data.getData();
                     // We need the ID for the selected contact to perform subsequent searches.
                     String[] con_id = PullContactID(cData);
-                    // Now we have the ID for the selected contact, we can use it to pull in the other database entries.
                     if (!con_id[0].equals("NO_DATA")) {
+                        // If the ID is not in the Database, we will add it now.
+
+                        // Otherwise, we will select the existing one.
+
+                        // Now we have the ID for the selected contact, we can use it to pull in the other database entries.
                         Log.i("Activity Result", "Contact name returned is " + con_id[1]);
                         String[] numberList = PullPhoneNumbers(con_id[0]);
                         if (numberList[0].equals("NO_DATA")) {
                             Log.i("Activity Result", "No phone number entries for this contact.");
                         } else {
                             Log.i("Activity Result", "There are " + String.valueOf(numberList.length) + " entries for this contact.");
+                            // If there are phone numbers, they can be added to the Database.
                         }
                         // Now we will use the ID to pull the email addresses.
                         String[] emailList = PullEmailAddresses(con_id[0]);
@@ -278,6 +284,7 @@ public class ContactListActivity extends ActionBarActivity {
                             Log.i("Activity Result", "No email address entries for this contact.");
                         } else {
                             Log.i("Activity Result", "There are " + String.valueOf(emailList.length) + " entries for this contact.");
+                            // If there are email addresses, they can be added to the Database.
                         }
                         // Now we have all the information we need, it's time to populate the
                         // Contact Manager.
@@ -293,7 +300,6 @@ public class ContactListActivity extends ActionBarActivity {
     // The last method in this class is the exit method to close the manager on user request.
 
     public void exitContactMgr(View v) {
-        commitData();
         finish();
     }
 }
