@@ -4,14 +4,14 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
+import android.util.Log;
 
 /**
  * Created by peteb_000 on 29/01/2015.
  */
 public class StorageHelper extends SQLiteOpenHelper {
-    private static final String DATABASE_NAME = "EmergencyContacts.db";
-    private static final int DATABASE_VERSION = 1;
-    private static final String STORE_CONTACT_TABLE = "contact_list";
+    private static final String DATABASE_NAME = "EContacts.db";
+    private static final int DATABASE_VERSION = 2;
     private static final String SQL_DELETE_PERSONS =
             "DROP TABLE IF EXISTS " + PersonEntry.TABLE_NAME;
     private static final String SQL_DELETE_CONTACTS =
@@ -24,22 +24,33 @@ public class StorageHelper extends SQLiteOpenHelper {
         @Override
         public void onCreate(SQLiteDatabase db) {
             // Create the database if it does not exist.
+            Log.i("StorageHelper", "Creating table " + PersonEntry.TABLE_NAME + " ...");
             db.execSQL("CREATE TABLE IF NOT EXISTS " + PersonEntry.TABLE_NAME +
-                    "(" + PersonEntry.COLUMN_NAME_UID + "INT PRIMARY KEY," +
-                    PersonEntry.COLUMN_NAME_CONTACT_ID + " TEXT," +
-                    PersonEntry.COLUMN_DISPLAY_NAME + " TEXT)");
+                    "(" + PersonEntry.COLUMN_NAME_UID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    PersonEntry.COLUMN_NAME_CONTACT_ID + " TEXT, " +
+                    PersonEntry.COLUMN_DISPLAY_NAME + " TEXT);");
+            Log.i("StorageHelper", "Creating table " + ContactEntry.TABLE_NAME + " ...");
             db.execSQL("CREATE TABLE IF NOT EXISTS " + ContactEntry.TABLE_NAME +
-                    "(" + ContactEntry.COLUMN_NAME_CONTACT_ID + " TEXT," +
-                    ContactEntry.COLUMN_DATA_CATEGORY + " TEXT," +
-                    ContactEntry.COLUMN_DATA_FIELD + " TEXT)");
+                    "(" + ContactEntry.COLUMN_NAME_CONTACT_ID + " TEXT, " +
+                    ContactEntry.COLUMN_DATA_CATEGORY + " TEXT, " +
+                    ContactEntry.COLUMN_DATA_FIELD + " TEXT);");
         }
 
     public void onUpgrade(SQLiteDatabase db, int oldV, int newV) {
         // Currently this method does nothing, although it needs to be declared in the Helper class.
+        Log.i("StorageHelper", "onUpgrade called");
+        db.execSQL(SQL_DELETE_PERSONS);
+        db.execSQL(SQL_DELETE_CONTACTS);
+        onCreate(db);
         }
+
+    public void onDowngrade(SQLiteDatabase db, int oldV, int newV) {
+        onUpgrade(db, oldV, newV);
+    }
 
     public void onOpen(SQLiteDatabase db) {
         // More needed here, obviously.
+        Log.i("StorageHelper", "onOpen called on " + db.toString());
         }
 
     public static abstract class ContactEntry implements BaseColumns {
@@ -51,7 +62,7 @@ public class StorageHelper extends SQLiteOpenHelper {
 
     public static abstract class PersonEntry implements BaseColumns {
         public static final String TABLE_NAME = "persons";
-        public static final String COLUMN_NAME_UID = "uid";
+        public static final String COLUMN_NAME_UID = "_id";
         public static final String COLUMN_NAME_CONTACT_ID = "contact_id";
         public static final String COLUMN_DISPLAY_NAME = "display_name";
     }

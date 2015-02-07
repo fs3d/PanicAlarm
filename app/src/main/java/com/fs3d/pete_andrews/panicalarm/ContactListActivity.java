@@ -172,6 +172,14 @@ public class ContactListActivity extends ActionBarActivity {
         // Opens the DB in read-only mode. An ArrayAdapter will be built directly from this.
         StorageHelper mHelper = new StorageHelper(this);
         SQLiteDatabase db = mHelper.getReadableDatabase();
+        String SQL_DELETE_PERSONS =
+                "DROP TABLE IF EXISTS " + StorageHelper.PersonEntry.TABLE_NAME;
+        String SQL_DELETE_CONTACTS =
+                "DROP TABLE IF EXISTS " + StorageHelper.ContactEntry.TABLE_NAME;
+        Log.i("ContactListActivity", "Executing delete statements (Debugging purposes)");
+        db.execSQL(SQL_DELETE_PERSONS);
+        db.execSQL(SQL_DELETE_CONTACTS);
+        Log.i("ContactListActivity", "Tables deleted. Creating new ones...");
         String sortOrder = StorageHelper.PersonEntry.COLUMN_NAME_UID + " DESC";
         Cursor cc, cp;
         try {
@@ -182,8 +190,11 @@ public class ContactListActivity extends ActionBarActivity {
             cp.moveToFirst();
         } catch (SQLiteException e) {
             // Exception thrown trying to query database.
-            createTables();
-            cc = db.query(StorageHelper.PersonEntry.TABLE_NAME, null, null, null, null, null, sortOrder);
+            Log.i("ContactListActivity", "Trying to open the database as Read-Only failed. Trying again as Read-Write.");
+            mHelper.onCreate(db);
+            db = mHelper.getWritableDatabase();
+            // createTables();
+            cc = db.query(StorageHelper.PersonEntry.TABLE_NAME, null, null, null, null, null, null);
             cc.moveToFirst();
             cp = db.query(StorageHelper.ContactEntry.TABLE_NAME, null, null, null, null, null, null);
             cp.moveToFirst();
@@ -195,16 +206,22 @@ public class ContactListActivity extends ActionBarActivity {
         String prevtype = "_NAME";
         ArrayList<ArrayList<String>> contacts = new ArrayList<>();
         do {
-            String itemId = cp.getString(cp.getColumnIndexOrThrow(StorageHelper.PersonEntry.COLUMN_NAME_UID));
-            String per_id = cp.getString(cp.getColumnIndexOrThrow(StorageHelper.PersonEntry.COLUMN_NAME_CONTACT_ID));
-            String dispname = cp.getString(cp.getColumnIndexOrThrow(StorageHelper.PersonEntry.COLUMN_DISPLAY_NAME));
-            // The above lines reference the persons table. The top level ArrayList is built from this.
-            do {
-                String con_id = cc.getString(cc.getColumnIndexOrThrow(StorageHelper.ContactEntry.COLUMN_NAME_CONTACT_ID));
-                String dataval = cc.getString(cc.getColumnIndexOrThrow(StorageHelper.ContactEntry.COLUMN_DATA_FIELD));
-                String datatype = cc.getString(cc.getColumnIndexOrThrow(StorageHelper.ContactEntry.COLUMN_DATA_CATEGORY));
-                // The above 3 lines reference the contactable table. The 2nd dimension ArrayList is built from this.
-            } while (cc.moveToNext());
+            try {
+                int itemId = cp.getInt(cp.getColumnIndexOrThrow(StorageHelper.PersonEntry.COLUMN_NAME_UID));
+                String per_id = cp.getString(cp.getColumnIndex(StorageHelper.PersonEntry.COLUMN_NAME_CONTACT_ID));
+                String dispname = cp.getString(cp.getColumnIndex(StorageHelper.PersonEntry.COLUMN_DISPLAY_NAME));
+                // The above lines reference the persons table. The top level ArrayList is built from this.
+                do {
+                    String con_id = cc.getString(cc.getColumnIndex(StorageHelper.ContactEntry.COLUMN_NAME_CONTACT_ID));
+                    String dataval = cc.getString(cc.getColumnIndex(StorageHelper.ContactEntry.COLUMN_DATA_FIELD));
+                    String datatype = cc.getString(cc.getColumnIndex(StorageHelper.ContactEntry.COLUMN_DATA_CATEGORY));
+                    // The above 3 lines reference the contactable table. The 2nd dimension ArrayList is built from this.
+                } while (cc.moveToNext());
+            } catch (Exception xx) {
+                // Exception thrown. Let's see what the issue is.
+                xx.printStackTrace();
+                Log.i("ContactList Exception", "Attempting to read column data for records in one of the tables has thrown the above Exception.");
+            }
         } while (cp.moveToNext());
     }
 
@@ -232,14 +249,24 @@ public class ContactListActivity extends ActionBarActivity {
         // Creates the contact tables if they don't already exist. Person Entry first.
         StorageHelper mHelper = new StorageHelper(this);
         SQLiteDatabase db = mHelper.getWritableDatabase();
-        db.execSQL("CREATE TABLE IF NOT EXISTS " + StorageHelper.PersonEntry.TABLE_NAME + "(" +
-                StorageHelper.PersonEntry.COLUMN_NAME_UID + "INT PRIMARY KEY," +
-                StorageHelper.PersonEntry.COLUMN_NAME_CONTACT_ID + " TEXT," +
-                StorageHelper.PersonEntry.COLUMN_DISPLAY_NAME + " TEXT)");
-        db.execSQL("CREATE TABLE IF NOT EXISTS " + StorageHelper.ContactEntry.TABLE_NAME + "(" +
-                StorageHelper.ContactEntry.COLUMN_NAME_CONTACT_ID + " TEXT," +
-                StorageHelper.ContactEntry.COLUMN_DATA_CATEGORY + " TEXT," +
-                StorageHelper.ContactEntry.COLUMN_DATA_FIELD + " TEXT)");
+        Log.i("ContactListActivity", "Attempting removal of extraneous tables...");
+        db.execSQL("DROP TABLE IF EXISTS '" + StorageHelper.PersonEntry.TABLE_NAME + "'");
+        Log.i("ContactListActivity", "Attempting to create table '" + StorageHelper.PersonEntry.TABLE_NAME + "'");
+        db.execSQL("CREATE TABLE '" + StorageHelper.PersonEntry.TABLE_NAME + "' ('" +
+                StorageHelper.PersonEntry.COLUMN_NAME_UID + "' INTEGER PRIMARY KEY AUTOINCREMENT, '" +
+                StorageHelper.PersonEntry.COLUMN_NAME_CONTACT_ID + "' TEXT, '" +
+                StorageHelper.PersonEntry.COLUMN_DISPLAY_NAME + "' TEXT)");
+        Log.i("ContactListActivity", "Attempting removal of extraneous tables...");
+        db.execSQL("DROP TABLE IF EXISTS '" + StorageHelper.ContactEntry.TABLE_NAME + "'");
+        Log.i("ContactListActivity", "Attempting to create table '" + StorageHelper.ContactEntry.TABLE_NAME + "'");
+        db.execSQL("CREATE TABLE '" + StorageHelper.ContactEntry.TABLE_NAME + "' ('" +
+                StorageHelper.ContactEntry.COLUMN_NAME_CONTACT_ID + "' TEXT, '" +
+                StorageHelper.ContactEntry.COLUMN_DATA_CATEGORY + "' TEXT, '" +
+                StorageHelper.ContactEntry.COLUMN_DATA_FIELD + "' TEXT)");
+        Log.i("ContactListActivity", "Trying to verify existence of data in tables...");
+        String pathway = db.getPath().toString();
+        String vers = String.valueOf(db.getVersion());
+        Log.i("ContactListActivity", "Reported DB is " + pathway + " (V" + vers + ")");
     }
 
     public void commitData() {
