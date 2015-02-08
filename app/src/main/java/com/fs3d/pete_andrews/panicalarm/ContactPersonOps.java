@@ -53,6 +53,15 @@ public class ContactPersonOps {
         return newContact;
     }
 
+    public Persons getContact(long uid) {
+        Cursor crsr = mDB.query(mDbHelper.TABLE_PERSON, mColumns, mDbHelper.COL_UID + " = ?", new String[]{String.valueOf(uid)}, null, null, null);
+        if (crsr != null) {
+            crsr.moveToFirst();
+        }
+        Persons entry = locateContact(crsr);
+        return entry;
+    }
+
     public Persons locateContact(Cursor crsr) {
         Persons entry = new Persons();
         entry.setId(crsr.getLong(0));

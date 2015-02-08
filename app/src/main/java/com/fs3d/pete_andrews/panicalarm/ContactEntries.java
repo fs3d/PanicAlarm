@@ -11,17 +11,17 @@ public class ContactEntries implements Serializable {
 
     private long mId;
     private String mConId;
-    private boolean mEnabled;
+    private int mEnabled;
     private String mDataVal;
     private String mDataType;
     private String mDataLabel;
     private Persons mContact;
 
     public ContactEntries() {
-
+        // Empty constructor.
     }
 
-    public ContactEntries(String conId, boolean enabled, String dataVal, String dataType, String dataLabel) {
+    public ContactEntries(String conId, int enabled, String dataVal, String dataType, String dataLabel) {
         this.mConId = conId;
         this.mEnabled = enabled;
         this.mDataVal = dataVal;
@@ -37,11 +37,11 @@ public class ContactEntries implements Serializable {
         this.mId = mId;
     }
 
-    public boolean getEnabled() {
+    public int getEnabled() {
         return mEnabled;
     }
 
-    public void setEnabled(boolean enabled) {
+    public void setEnabled(int enabled) {
         this.mEnabled = enabled;
     }
 
