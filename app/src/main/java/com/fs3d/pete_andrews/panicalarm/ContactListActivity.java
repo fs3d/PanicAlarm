@@ -63,6 +63,13 @@ public class ContactListActivity extends ActionBarActivity {
 
     public void onActivityResult(int reqCode, int resultCode, Intent data) {
         super.onActivityResult(reqCode, resultCode, data);
+        // This entire If block encapsulates an OK result for all requests.
+        if (resultCode == RESULT_OK) {
+            // This nested If block checks for a request linked to the contact picker activity.
+            if (reqCode == 101) {
+                // To-do: Put the relevant Contact information into the internal database.
+            }
+        }
     }
 
     // The last method in this class is the exit method to close the manager on user request.
