@@ -9,12 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 
-import com.fs3d.pete_andrews.panicalarm.com.fs3d.pete_andrews.panicalarm.adapters.PersonsAdapter;
-import com.fs3d.pete_andrews.panicalarm.com.fs3d.pete_andrews.panicalarm.dataops.ContactPersonOps;
-import com.fs3d.pete_andrews.panicalarm.com.fs3d.pete_andrews.panicalarm.dataops.Persons;
-
 import java.util.ArrayList;
-import java.util.List;
 
 public class ContactListActivity extends ActionBarActivity {
 
@@ -22,9 +17,7 @@ public class ContactListActivity extends ActionBarActivity {
     public ArrayList<ArrayList<String>> SecureContactList = new ArrayList<>();
     public String id, contact_id, display_name, data_category, data_value;
     private ListView mListViewPeople;
-    private PersonsAdapter people;
-    private List<Persons> mListPeople;
-    private ContactPersonOps mPersonDAO;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,7 +71,7 @@ public class ContactListActivity extends ActionBarActivity {
             // This nested If block checks for a request linked to the contact picker activity.
             if (reqCode == 101) {
                 // To-do: Put the relevant Contact information into the internal database.
-                mPersonDAO.addContact("Debug Test", "debugTest1", "debugTest2");
+
             }
         }
     }
