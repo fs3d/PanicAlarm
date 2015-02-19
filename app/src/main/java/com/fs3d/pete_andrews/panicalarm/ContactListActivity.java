@@ -1,6 +1,8 @@
 package com.fs3d.pete_andrews.panicalarm;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract.Contacts;
 import android.support.v7.app.ActionBarActivity;
@@ -14,8 +16,10 @@ import java.util.ArrayList;
 public class ContactListActivity extends ActionBarActivity {
 
     private static final String TAG = "ContactListActivity";
+    public ArrayList<String[]> SecureConList = new ArrayList<>();
     public ArrayList<ArrayList<String>> SecureContactList = new ArrayList<>();
     public String id, contact_id, display_name, data_category, data_value;
+    private dataManager dmgr;
     private ListView mListViewPeople;
 
     @Override
@@ -32,7 +36,6 @@ public class ContactListActivity extends ActionBarActivity {
             FetchContact();
         }
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -70,13 +73,33 @@ public class ContactListActivity extends ActionBarActivity {
         if (resultCode == RESULT_OK) {
             // This nested If block checks for a request linked to the contact picker activity.
             if (reqCode == 101) {
-                // To-do: Put the relevant Contact information into the internal database.
+                // Declare all private variables for this method.
+                ArrayList<String[]> dataList = new ArrayList<String[]>();
+                // First, we find and then pull the details from the Contact Picker data.
+                Uri cdat = data.getData();
+                Cursor crsr = getContentResolver().query(cdat, null, null, null, null);
+                crsr.moveToFirst(); // This should be guaranteed to work unless the Contact Picker is bugged.
+                // Next, we extract the Contact ID and Display Name.
+                String conId = crsr.getString(crsr.getColumnIndexOrThrow(Contacts._ID));
+                String displayName = crsr.getString(crsr.getColumnIndexOrThrow(Contacts.DISPLAY_NAME));
+                // Now, we close the Contact Picker cursor.
+                crsr.close();
+                // We call our custom Data Manager class to handle retrieving all other information.
+                dmgr = new dataManager(this, conId, displayName);
+                // Now we call a pullData method to find all the phone numbers.
+                dataList.add(dmgr.pullData(1));
+                // Now we do the same for email addresses.
+                dataList.add(dmgr.pullData(2));
+                // Now we do the same with all the IM accounts.
+                dataList.add(dmgr.pullData(3));
+                // Finally, we add everything to the internal database.
 
+                //All done. We can go now.
             }
         }
     }
 
-    // The last method in this class is the exit method to close the manager on user request.
+    // The last method in this class is the exit method to close the manager on button tap.
 
     public void exitContactMgr(View v) {
         finish();
