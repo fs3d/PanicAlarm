@@ -23,7 +23,7 @@ public class mDBHelper extends SQLiteOpenHelper {
             + COLUMN_DATA_TYPE + " text not null, "
             + COLUMN_ACTIVE + " text not null);";
     private static final String DATABASE_NAME = "contacts.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     public mDBHelper(Context ctxt) {
         super(ctxt, DATABASE_NAME, null, DATABASE_VERSION);
@@ -32,18 +32,19 @@ public class mDBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         // Create Database with execSQL statement
+		db.execSQL(CREATE_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Up/Downgrade database with execSQL statement
-        db.execSQL("DROP TABLE IF EXIST " + TABLE_CONTACTS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CONTACTS);
         onCreate(db);
     }
 
     @Override
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        super.onDowngrade(db, oldVersion, newVersion);
+        // super.onDowngrade(db, oldVersion, newVersion);
         onUpgrade(db, oldVersion, newVersion);
     }
 

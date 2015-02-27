@@ -12,6 +12,7 @@ import android.view.View;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import android.widget.*;
 
 public class ContactListActivity extends ActionBarActivity {
 
@@ -21,6 +22,10 @@ public class ContactListActivity extends ActionBarActivity {
     public String display_name;
     public String data_category;
     private dataManager dmgr;
+	TextView tvDebug;
+	ListView lvContacts;
+	ArrayList conList;
+	String[] conArray;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,9 +37,14 @@ public class ContactListActivity extends ActionBarActivity {
          * the activity that started this one.
          **/
         String args = getIntent().getStringExtra("args");
+		lvContacts = (ListView) findViewById(R.id.contactLV);
+		tvDebug = (TextView) findViewById(R.id.tvDebug);
         if (args.equals("add")) {
             FetchContact();
-        }
+        } else {
+			// Populate from existing data.
+			PopulateList();
+		}
     }
 
     @Override
@@ -63,26 +73,56 @@ public class ContactListActivity extends ActionBarActivity {
     }
 
     void FetchContact() {
+		tvDebug.setText("FetchContact calling Contact Picker...\n");
         Intent i = new Intent(Intent.ACTION_PICK, Contacts.CONTENT_URI);
         startActivityForResult(i, 101);
     }
+	
+	void PopulateList() {
+		// Populate ListView with data from internal database.
+		lvContacts = (ListView) findViewById(R.id.contactLV);
+		dataManager dmanage = new dataManager(this);
+		dmanage.connectDatabase();
+		conArray = dmanage.getContactData("23");
+		tvDebug.setText("Returned "+conArray.length+" records.");
+		ArrayAdapter adpt = new ArrayAdapter(this, android.R.layout.simple_list_item_1,conArray);
+		lvContacts.setAdapter(adpt);
+		lvContacts.invalidate();
+	}
 
     public void onActivityResult(int reqCode, int resultCode, Intent data) {
         super.onActivityResult(reqCode, resultCode, data);
         // This entire If block encapsulates an OK result for all requests.
+		tvDebug.append("FetchContact returned result...\n");
         if (resultCode == RESULT_OK) {
             // This nested If block checks for a request linked to the contact picker activity.
             if (reqCode == 101) {
                 // Declare all private variables for this method.
                 ArrayList<String[]> dataList = new ArrayList<>();
+				tvDebug.append("New ArrayList...\n");
                 // First, we find and then pull the details from the Contact Picker data.
                 Uri cdat = data.getData();
+				tvDebug.append("Call to GetData...\n");
                 dataList = processContact(cdat); // Pass the URI to processContact method.
+				if (dataList.isEmpty()){
+					// Failed to get data.
+				} else {
+				tvDebug.append("Call to processContact...\n");
                 dataManager dmanage = new dataManager(this, dataList.get(0)[0], dataList.get(0)[1]);
+				dmanage.connectDatabase();
+				tvDebug.append("New dataManager...\n");
                 for (int i = 0; i < dataList.size(); i++) {
                     // Array locations: 0=ID, 1=Name, 2=Type, 3=Value, 4=State
+					tvDebug.append("["+dataList.get(i)[0]+"] "
+					+dataList.get(i)[1]+" <<"
+					+dataList.get(i)[2]+">> "
+					+dataList.get(i)[3]+" / "
+					+dataList.get(i)[4]+" [Entry "+String.valueOf(i)
+					+"]... ");
                     dmanage.addData(dataList.get(i)[2], dataList.get(i)[3], dataList.get(i)[4], true);
+					tvDebug.append("OK\n");
                 }
+				}
             }
         }
     }

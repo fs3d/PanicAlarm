@@ -28,7 +28,7 @@ public class InitActivity extends ActionBarActivity {
                 "in either your home country, the author's home country, or the " +
                 "United States of America, as defined in applicable copyright law.");
         try {
-            String splashline = "Panic Alarm v" + BuildConfig.VERSION_NAME;
+            String splashline = "Panic Alarm v0.02.4 AIDE build";
             splashView.setText(splashline);
         } catch (Exception e) {
             String splashline = "Panic Alarm (Unable to parse version information)";
