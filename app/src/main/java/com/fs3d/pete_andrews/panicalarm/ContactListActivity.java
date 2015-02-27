@@ -86,7 +86,7 @@ public class ContactListActivity extends ActionBarActivity {
 		lvContacts = (ListView) findViewById(R.id.contactLV);
 		dataManager dmanage = new dataManager(this);
 		dmanage.connectDatabase();
-		conArray = dmanage.getContactData("23");
+		conArray = dmanage.getContactNames();
 		tvDebug.setText("Returned "+conArray.length+" records.");
 		ArrayAdapter adpt = new ArrayAdapter(this, android.R.layout.simple_list_item_1,conArray);
 		lvContacts.setAdapter(adpt);

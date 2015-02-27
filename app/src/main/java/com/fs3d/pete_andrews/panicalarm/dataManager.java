@@ -241,21 +241,9 @@ public class dataManager {
 		return conLabel;
     }
 	
-	public String[] getContactNames(ArrayList aList){
-		String[] output = new String[aList.size()];
-		String build;
-		for (int i=0;i<aList.size();i++){
-			build = "("+aList.toArray()[i]+") ";
-			output[i]=build;
-		}
-		return output; // new String[] {"Dude","Doll","Androgynoid","Zombie"};
-	}
-	
 	public String[] getContactNames(){
 		ArrayList<String> aList = new ArrayList<>();
-		String[] tmp;
-		String sel = " = ?";
-		String[] selArgs = null;
+		String[] tmp = new String[2];
 		if(db.isOpen()){
 			String[] sqlcols = new String[]{mDBHelper.COLUMN_CONTACT_ID,mDBHelper.COLUMN_DISPLAY_NAME};
 			crsr = db.query(true,
@@ -268,16 +256,22 @@ public class dataManager {
 			null,
 			null);
 			if (crsr.moveToFirst()){
-				
+				do {
+				tmp[0] = crsr.getString(crsr.getColumnIndex(mDBHelper.COLUMN_CONTACT_ID));
+				tmp[1] = crsr.getString(crsr.getColumnIndex(mDBHelper.COLUMN_DISPLAY_NAME));
+					String build = "["+tmp[0]+"] "+tmp[1];
+					aList.add(build);
+				} while (crsr.moveToNext());
 			}
 		}
-		return new String[]{"Some guy","Some girl","A nobody"};
+		tmp = aList.toArray(new String[aList.size()]);
+		return tmp;
 	}
 	
 	public String[] getContactData(String _id){
 		// new ArrayList store
 		ArrayList<String> aList = new ArrayList<>();
-		String[] tmp = new String[1];
+		String[] tmp = new String[2];
 		String sel = mDBHelper.COLUMN_CONTACT_ID + " LIKE ?";
 		String[] selArgs = new String[]{_id};
 		if(db.isOpen()){
