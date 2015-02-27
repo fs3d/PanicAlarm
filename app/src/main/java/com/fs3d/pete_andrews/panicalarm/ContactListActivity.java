@@ -13,6 +13,7 @@ import android.view.View;
 import java.util.ArrayList;
 import java.util.Arrays;
 import android.widget.*;
+import android.util.*;
 
 public class ContactListActivity extends ActionBarActivity {
 
@@ -40,9 +41,11 @@ public class ContactListActivity extends ActionBarActivity {
 		lvContacts = (ListView) findViewById(R.id.contactLV);
 		tvDebug = (TextView) findViewById(R.id.tvDebug);
         if (args.equals("add")) {
+			Log.d(TAG,"Call to Contact Picker");
             FetchContact();
         } else {
 			// Populate from existing data.
+			Log.d(TAG,"Populating ListView...");
 			PopulateList();
 		}
     }

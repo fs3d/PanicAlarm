@@ -251,6 +251,29 @@ public class dataManager {
 		return output; // new String[] {"Dude","Doll","Androgynoid","Zombie"};
 	}
 	
+	public String[] getContactNames(){
+		ArrayList<String> aList = new ArrayList<>();
+		String[] tmp;
+		String sel = " = ?";
+		String[] selArgs = null;
+		if(db.isOpen()){
+			String[] sqlcols = new String[]{mDBHelper.COLUMN_CONTACT_ID,mDBHelper.COLUMN_DISPLAY_NAME};
+			crsr = db.query(true,
+			mDBHelper.TABLE_CONTACTS,
+			sqlcols,
+			null,
+			null,
+			mDBHelper.COLUMN_CONTACT_ID,
+			null,
+			null,
+			null);
+			if (crsr.moveToFirst()){
+				
+			}
+		}
+		return new String[]{"Some guy","Some girl","A nobody"};
+	}
+	
 	public String[] getContactData(String _id){
 		// new ArrayList store
 		ArrayList<String> aList = new ArrayList<>();
