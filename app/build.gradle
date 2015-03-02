@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 19
+    compileSdkVersion 21
     buildToolsVersion "21.1.2"
 
     def versionPropsFile = file('version.properties')
@@ -30,7 +30,7 @@ android {
         defaultConfig {
             applicationId "com.fs3d.pete_andrews.panicalarm"
             minSdkVersion 14
-            targetSdkVersion 19
+            targetSdkVersion 21
             versionCode version_code
             versionName "${versionMajor}.${versionMinor}.${versionPatch} (Build ${versionBuild})"
         }

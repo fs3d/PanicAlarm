@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -126,9 +127,12 @@ public class PrefsActivity extends ActionBarActivity {
         switch (reqCode) {
             case (101):
                 // No op - Add contact
+                Log.d("PrefsActivity/Comms", "Contact Picker returned results.");
+                Log.d("PrefsActivity/Comms", "");
                 break;
             case (102):
                 // No op - Manage contacts
+                Log.d("PrefsActivity/Comms", "ContactListActivity returned result.");
                 break;
             default:
                 // All other cases

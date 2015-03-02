@@ -15,15 +15,17 @@ public class mDBHelper extends SQLiteOpenHelper {
     public static final String COLUMN_DISPLAY_NAME = "display_name";
     public static final String COLUMN_DATA_VALUE = "data_value";
     public static final String COLUMN_DATA_TYPE = "data_type";
+    public static final String COLUMN_DATA_LABEL = "data_label";
     public static final String COLUMN_ACTIVE = "flag_active";
     public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_CONTACTS
             + "(" + COLUMN_CONTACT_ID + " text not null, "
             + COLUMN_DISPLAY_NAME + " text not null, "
             + COLUMN_DATA_VALUE + " text not null, "
             + COLUMN_DATA_TYPE + " text not null, "
+            + COLUMN_DATA_LABEL + " text, "
             + COLUMN_ACTIVE + " text not null);";
     private static final String DATABASE_NAME = "contacts.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 1;
 
     public mDBHelper(Context ctxt) {
         super(ctxt, DATABASE_NAME, null, DATABASE_VERSION);
