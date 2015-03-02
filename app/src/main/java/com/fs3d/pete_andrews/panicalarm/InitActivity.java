@@ -64,11 +64,16 @@ public class InitActivity extends ActionBarActivity {
 
     public void goDebug(View v) {
         Intent intnt = new Intent(this, DebugMode.class);
+        intnt.putExtra("args", "manage");
         startActivity(intnt);
     }
 
     public void goSecure(View v) {
-        Intent intnt = new Intent(this, ServiceControl.class);
-        startActivity(intnt);
+        Intent intnt = new Intent(this, ContactListActivity.class);
+        startActivityForResult(intnt, 100);
+    }
+
+    public void onActivityResult(int resCode, int reqcode, Intent data) {
+
     }
 }

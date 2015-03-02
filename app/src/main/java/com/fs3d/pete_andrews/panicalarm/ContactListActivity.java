@@ -1,15 +1,16 @@
 package com.fs3d.pete_andrews.panicalarm;
 
+import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract.Contacts;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -17,14 +18,15 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class ContactListActivity extends ActionBarActivity {
+public class ContactListActivity extends ListActivity {
 
     private static final String TAG = "ContactListActivity";
     public String id;
     public String contact_id;
     public String display_name;
     public String data_category;
-	TextView tvDebug;
+    int position, itemid;
+    TextView tvDebug;
 	ListView lvContacts;
 	ArrayList conList;
 	String[] conArray;
@@ -40,16 +42,26 @@ public class ContactListActivity extends ActionBarActivity {
          * the activity that started this one.
          **/
         String args = getIntent().getStringExtra("args");
-		lvContacts = (ListView) findViewById(R.id.contactLV);
-		tvDebug = (TextView) findViewById(R.id.tvDebug);
-        if (args.equals("add")) {
-			Log.d(TAG,"Call to Contact Picker");
-            FetchContact();
+        lvContacts = (ListView) findViewById(android.R.id.list);
+        tvDebug = (TextView) findViewById(R.id.tvDebug);
+        if (args != null) {
+            if (args.equals("add")) {
+                Log.d(TAG, "Call to Contact Picker");
+                FetchContact();
+                finish();
+            } else {
+                // Populate from existing data.
+                Log.d(TAG, "Populating ListView...");
+            }
         } else {
-			// Populate from existing data.
-			Log.d(TAG,"Populating ListView...");
-			PopulateList();
-		}
+            Log.d("NullArgs", "Null Argument Reference. Passing control to Manager...");
+        }
+        lvContacts.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> av, View v, int pos, long _id) {
+                Log.d(TAG, "Click event?");
+            }
+        });
+        PopulateList();
     }
 
     @Override
@@ -85,15 +97,13 @@ public class ContactListActivity extends ActionBarActivity {
 	
 	void PopulateList() {
 		// Populate ListView with data from internal database.
-		lvContacts = (ListView) findViewById(R.id.contactLV);
 		dataManager dmanage = new dataManager(this);
 		dmanage.connectDatabase();
 		conArray = dmanage.getContactNames();
 		tvDebug.setText("Returned "+conArray.length+" records.");
-		ArrayAdapter adpt = new ArrayAdapter(this, android.R.layout.simple_list_item_1,conArray);
-		lvContacts.setAdapter(adpt);
-		lvContacts.invalidate();
-	}
+        ArrayAdapter adpt = new ArrayAdapter(this, R.layout.list_item_person, R.id.txt_display_name, conArray);
+        setListAdapter(adpt);
+    }
 
     public void onActivityResult(int reqCode, int resultCode, Intent data) {
         super.onActivityResult(reqCode, resultCode, data);
