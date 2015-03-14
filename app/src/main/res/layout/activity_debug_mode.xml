@@ -8,117 +8,125 @@
     android:padding="5dp"
     tools:context="com.fs3d.pete_andrews.panicalarm.DebugMode">
 
-
     <TextView
+        android:id="@+id/status_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:text="Debug Mode"
-        android:textAppearance="@android:style/TextAppearance.DeviceDefault.DialogWindowTitle" />
+        android:layout_gravity="center_horizontal"
+        android:autoText="false"
+        android:nestedScrollingEnabled="true"
+        android:text="Default &amp; default" />
 
     <GridLayout
+        android:id="@+id/lyt_grid"
         android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:layout_gravity="center"
-        android:alignmentMode="alignBounds"
-        android:layoutMode="clipBounds"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center"
+        android:alignmentMode="alignMargins"
+        android:columnCount="2"
+        android:nestedScrollingEnabled="true"
+        android:rowCount="10"
+        android:rowOrderPreserved="true"
+        android:textAlignment="center"
         android:useDefaultMargins="false">
 
-        <Button
-            android:id="@+id/btn_repgps"
-            android:layout_width="150dp"
-            android:layout_height="50dp"
-            android:layout_column="0"
-            android:layout_row="0"
-            android:onClick="reportGPSStatus"
-            android:text="Report GPS" />
 
         <Button
-            android:id="@+id/btn_repacc"
+            android:id="@+id/btn_getGpsStatus"
             style="?android:attr/buttonStyleSmall"
-            android:layout_width="150dp"
-            android:layout_height="50dp"
-            android:layout_column="1"
-            android:layout_row="0"
-            android:layout_rowSpan="2"
-            android:text="Report Accelerometer" />
+            android:layout_width="200dp"
+            android:layout_height="60dp"
+            android:text="Examine GPS"
+            android:textSize="10dp" />
 
         <Button
-            android:id="@+id/btn_repmic"
+            android:id="@+id/btn_getMicStatus"
             style="?android:attr/buttonStyleSmall"
-            android:layout_width="150dp"
-            android:layout_height="50dp"
-            android:layout_column="0"
-            android:layout_gravity="center_horizontal"
-            android:layout_row="2"
-            android:text="Report Microphone" />
+            android:layout_width="200dp"
+            android:layout_height="60dp"
+            android:text="Examine Mics"
+            android:textSize="10dp" />
 
         <Button
-            android:id="@+id/btn_repcam"
+            android:id="@+id/btn_getCamStatus"
             style="?android:attr/buttonStyleSmall"
-            android:layout_width="150dp"
-            android:layout_height="50dp"
-            android:layout_column="1"
-            android:layout_gravity="center_horizontal"
-            android:layout_row="2"
-            android:text="Report Camera" />
+            android:layout_width="200dp"
+            android:layout_height="60dp"
+            android:text="Examine Cameras"
+            android:textSize="10dp" />
 
         <Button
-            android:id="@+id/btn_repsms"
+            android:id="@+id/btn_getNetStatus"
             style="?android:attr/buttonStyleSmall"
-            android:layout_width="150dp"
-            android:layout_height="50dp"
-            android:layout_column="0"
-            android:layout_gravity="center_horizontal"
-            android:layout_row="3"
-            android:text="Report SMS" />
+            android:layout_width="200dp"
+            android:layout_height="60dp"
+            android:text="Examine Network"
+            android:textSize="10dp" />
 
         <Button
-            android:id="@+id/btn_repmail"
+            android:id="@+id/btn_getSensors"
             style="?android:attr/buttonStyleSmall"
-            android:layout_width="150dp"
-            android:layout_height="50dp"
-            android:layout_column="1"
-            android:layout_gravity="center_horizontal"
-            android:layout_row="3"
-            android:text="Report Mail" />
+            android:layout_width="200dp"
+            android:layout_height="60dp"
+            android:text="Examine Sensors"
+            android:textSize="10dp" />
 
         <Button
-            android:id="@+id/btn_rephset"
+            android:id="@+id/btn_testPwrStatus"
             style="?android:attr/buttonStyleSmall"
-            android:layout_width="150dp"
-            android:layout_height="50dp"
-            android:layout_column="0"
-            android:layout_gravity="center_horizontal"
-            android:layout_row="4"
-            android:text="Report Headset" />
+            android:layout_width="200dp"
+            android:layout_height="60dp"
+            android:text="Examine Power Triggers"
+            android:textSize="10dp" />
 
         <Button
-            android:id="@+id/btn_reppwr"
+            android:id="@+id/btn_triggerSvcTest"
             style="?android:attr/buttonStyleSmall"
-            android:layout_width="150dp"
-            android:layout_height="50dp"
-            android:layout_column="1"
-            android:layout_gravity="center_horizontal"
-            android:layout_row="4"
-            android:text="Report Power" />
+            android:layout_width="400dp"
+            android:layout_height="60dp"
+            android:layout_columnSpan="2"
+            android:onClick="launchService"
+            android:text="Launch background service" />
 
+        <Button
+            android:id="@+id/btn_triggerNotification"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="200dp"
+            android:layout_height="60dp"
+            android:text="Trigger test notification"
+            android:textSize="10dp" />
+
+        <Button
+            android:id="@+id/btn_triggerTestPanic"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="200dp"
+            android:layout_height="60dp"
+            android:text="Test panic mode"
+            android:textSize="10dp" />
+
+        <Button
+            android:id="@+id/btn_killService"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="400dp"
+            android:layout_height="60dp"
+            android:layout_columnSpan="2"
+            android:text="Terminate Panic Service" />
+
+        <Button
+            android:id="@+id/btn_other1"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="200dp"
+            android:layout_height="60dp"
+            android:text="New Button"
+            android:textSize="10dp" />
+
+        <Button
+            android:id="@+id/btn_other2"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="200dp"
+            android:layout_height="60dp"
+            android:text="New Button"
+            android:textSize="10dp" />
     </GridLayout>
-
-    <ScrollView
-        android:id="@+id/scrollView"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:background="@android:drawable/alert_light_frame">
-
-        <TextView
-            android:id="@+id/status_view"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_gravity="center_horizontal"
-            android:autoText="false"
-            android:nestedScrollingEnabled="true"
-            android:text="Default &amp; default" />
-    </ScrollView>
 
 </LinearLayout>
