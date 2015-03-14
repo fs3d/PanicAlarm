@@ -1,5 +1,6 @@
 package com.fs3d.pete_andrews.panicalarm;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -13,7 +14,7 @@ public class DebugMode extends ActionBarActivity {
 
     // Reference variables for views in activity
     TextView statusBox;
-    Button btn_repAcc, btn_repGPS, btn_repMic, btn_repCam, btn_repSMS, btn_repMail, btn_repHeadSet, btn_repPwr;
+    Button btn_repAcc, btn_repGPS, btn_repMic, btn_repCam, btn_repSMS, btn_repMail, btn_repHeadSet, btn_repPwr, btn_startSvc, btn_killSvc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,14 +23,16 @@ public class DebugMode extends ActionBarActivity {
         // Status Box reference
         statusBox = (TextView) findViewById(R.id.status_view);
         // All button references
-        btn_repGPS = (Button) findViewById(R.id.btn_repgps);
-        btn_repAcc = (Button) findViewById(R.id.btn_repacc);
-        btn_repCam = (Button) findViewById(R.id.btn_repcam);
-        btn_repMic = (Button) findViewById(R.id.btn_repmic);
-        btn_repSMS = (Button) findViewById(R.id.btn_repsms);
-        btn_repMail = (Button) findViewById(R.id.btn_repmail);
-        btn_repPwr = (Button) findViewById(R.id.btn_reppwr);
-        btn_repHeadSet = (Button) findViewById(R.id.btn_rephset);
+        btn_repGPS = (Button) findViewById(R.id.btn_getGpsStatus);
+        btn_repAcc = (Button) findViewById(R.id.btn_getSensors);
+        btn_repCam = (Button) findViewById(R.id.btn_getCamStatus);
+        btn_repMic = (Button) findViewById(R.id.btn_getCamStatus);
+        btn_repSMS = (Button) findViewById(R.id.btn_getMicStatus);
+        btn_repMail = (Button) findViewById(R.id.btn_other1);
+        btn_repPwr = (Button) findViewById(R.id.btn_testPwrStatus);
+        btn_repHeadSet = (Button) findViewById(R.id.btn_other2);
+        btn_startSvc = (Button) findViewById(R.id.btn_triggerSvcTest);
+        btn_killSvc = (Button) findViewById(R.id.btn_killService);
         // Set onClickListener to handle long press on the status text.
         statusBox.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -72,5 +75,12 @@ public class DebugMode extends ActionBarActivity {
 
     public void reportGPSStatus(View v) {
         statusBox.append("\nGPS Status Button touched.\nGPS Status is [TEST].");
+    }
+
+    public void launchService(View v) {
+        // This will launch the main Panic Service in test mode.
+        Intent intent = new Intent(this.getApplicationContext(), PanicService.class);
+        intent.putExtra("args", new String[]{"start_service"});
+        startService(intent);
     }
 }

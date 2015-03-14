@@ -48,6 +48,11 @@
         <activity
             android:name=".ContactListActivity"
             android:label="@string/title_activity_contact_list"></activity>
+
+        <service
+            android:name=".PanicService"
+            android:label="Panic Alarm Service"
+            android:process=":PanicService" />
     </application>
 
 </manifest>
