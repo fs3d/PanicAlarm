@@ -5,6 +5,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -21,8 +22,10 @@ public class GPSManager implements GoogleApiClient.ConnectionCallbacks, GoogleAp
     private static final String TAG = "GPSManager";
     private Context ctxt;
     private int interval, dist, accuracy;
+    private double longitude, latitude;
     private GoogleApiClient mGAPIClient;
     private LocationManager locMgr;
+    private Handler xHndl;
 
     // Constructor calls
     public GPSManager() {
@@ -40,20 +43,25 @@ public class GPSManager implements GoogleApiClient.ConnectionCallbacks, GoogleAp
         this.accuracy = 1;
     }
 
+    // The following methods are mandatory for the purposes of this service and deal with
+    // connection-related tasks.
+
     @Override
     public void onConnected(Bundle bundle) {
         // Connection established.
         Location lastLoc = LocationServices.FusedLocationApi.getLastLocation(mGAPIClient);
-        String lat = String.valueOf(lastLoc.getLatitude());
-        String lon = String.valueOf(lastLoc.getLongitude());
+        latitude = lastLoc.getLatitude();
+        longitude = lastLoc.getLongitude();
+        String lat = String.valueOf(latitude);
+        String lon = String.valueOf(longitude);
         Log.d(TAG, "Initial Play Store Connection. Last known GPS Coordinates: " + lon + "/" + lat);
     }
 
     @Override
     public void onLocationChanged(Location location) {
         // Location changed. Update needed to app values.
-        String lat = String.valueOf(location.getLatitude());
-        String lon = String.valueOf(location.getLongitude());
+        latitude = location.getLatitude();
+        longitude = location.getLongitude();
         Log.d(TAG, "Update received.");
     }
 
@@ -85,5 +93,21 @@ public class GPSManager implements GoogleApiClient.ConnectionCallbacks, GoogleAp
     public void onConnectionSuspended(int i) {
         // Connection suspended.
         Log.d(TAG, "Connection " + String.valueOf(i) + " has been suspended.");
+    }
+
+    // The following methods are intended to be called from the primary service for the purposes of
+    // initializing a GPS location listener and get a series of location updates based on a series of criteria.
+
+    public double[] getLastKnownGPS() {
+        return new double[]{longitude, latitude};
+    }
+
+    public void enableGPSUpdates(Handler mHndlr, String arg) {
+        // This method is passed a handler so that it can send back GPS updates to wherever
+        // it has been called from and the calling Activity's Handler can use the data sent.
+        // Arguments: get_coords will send back the currently known Lon and Lat data once the GPS Manager is enabled.
+        //            log_coords will save the GPS updates to a text file internal to the app. This will be used to periodically send location history to a designated contact.
+        //            silent (a blank String will also suffice) will request enabling the GPS to update silently.
+        this.xHndl = mHndlr;
     }
 }
