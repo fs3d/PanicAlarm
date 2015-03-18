@@ -2,7 +2,6 @@ package com.fs3d.pete_andrews.panicalarm;
 
 import android.content.Context;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,22 +9,30 @@ import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationListener;
 
 /**
  * Created by peteb_000 on 14/03/2015.
  * This class manages all GPS related functions including threaded functions such as retrieving
  * street addresses and the like (declared at the end of this class).
  */
-public class GPSManager implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class GPSManager implements
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener,
+        LocationListener
+{
     // Variable and constant declarations.
     private static final String TAG = "GPSManager";
     private Context ctxt;
     private int interval, dist, accuracy;
     private double longitude, latitude;
+
     private GoogleApiClient mGAPIClient;
-    private LocationManager locMgr;
-    private Handler xHndl;
+    LocationManager locMgr;
+    private LocationRequest mLocRequest;
+    Handler xHndl;
 
     // Constructor calls
     public GPSManager() {
@@ -41,6 +48,42 @@ public class GPSManager implements GoogleApiClient.ConnectionCallbacks, GoogleAp
         this.interval = 10000;
         this.dist = 5;
         this.accuracy = 1;
+    }
+
+    public GPSManager(Context ctxt, int interval, int dist){
+        // Context, Interval and Distance declaration. Declare default accuracy value.
+        this.ctxt = ctxt;
+        this.interval = interval;
+        this.dist = dist;
+        this.accuracy = 1;
+    }
+
+    public void passHandler(Handler xHndler){
+        this.xHndl = xHndler;
+    }
+
+    protected synchronized void initPlayServices(){
+        locMgr = (LocationManager) ctxt.getSystemService(Context.LOCATION_SERVICE);
+        mGAPIClient = new GoogleApiClient.Builder(ctxt)
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
+        mGAPIClient.connect();
+    }
+
+    protected void endPlayServices(){
+        mGAPIClient.disconnect();
+        mGAPIClient = null;
+    }
+
+    protected void createLocationRequest(int interval, int dist){
+        mLocRequest = new LocationRequest();
+        mLocRequest.setInterval(interval);
+        mLocRequest.setFastestInterval(interval / 2);
+        mLocRequest.setSmallestDisplacement(dist);
+        mLocRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGAPIClient, mLocRequest, this);
     }
 
     // The following methods are mandatory for the purposes of this service and deal with
@@ -72,24 +115,6 @@ public class GPSManager implements GoogleApiClient.ConnectionCallbacks, GoogleAp
     }
 
     @Override
-    public void onProviderEnabled(String provider) {
-        // GPS Provider enabled. Setup initial variables.
-        Log.d(TAG, "Provider " + provider + " has now been enabled. It is now possible to connect.");
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-        // Disabled provider.
-        Log.d(TAG, "Provider " + provider + " is disabled. No connection possible.");
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-        // Change of status call
-        Log.d(TAG, "Provider " + provider + " status has changed.");
-    }
-
-    @Override
     public void onConnectionSuspended(int i) {
         // Connection suspended.
         Log.d(TAG, "Connection " + String.valueOf(i) + " has been suspended.");
@@ -97,6 +122,10 @@ public class GPSManager implements GoogleApiClient.ConnectionCallbacks, GoogleAp
 
     // The following methods are intended to be called from the primary service for the purposes of
     // initializing a GPS location listener and get a series of location updates based on a series of criteria.
+
+    public void terminateGPSRequest(){
+        mLocRequest = null;
+    }
 
     public double[] getLastKnownGPS() {
         return new double[]{longitude, latitude};
@@ -109,5 +138,6 @@ public class GPSManager implements GoogleApiClient.ConnectionCallbacks, GoogleAp
         //            log_coords will save the GPS updates to a text file internal to the app. This will be used to periodically send location history to a designated contact.
         //            silent (a blank String will also suffice) will request enabling the GPS to update silently.
         this.xHndl = mHndlr;
+        if(mLocRequest==null) createLocationRequest(interval, dist);
     }
 }
