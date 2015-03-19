@@ -1,6 +1,7 @@
 package com.fs3d.pete_andrews.panicalarm;
 
-import android.app.ListActivity;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -11,14 +12,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
-public class ContactListActivity extends ListActivity {
+public class ContactListActivity extends Activity {
 
     private static final String TAG = "ContactListActivity";
     public String id;
@@ -26,6 +31,7 @@ public class ContactListActivity extends ListActivity {
     public String display_name;
     public String data_category;
     int position, itemid;
+    ArrayAdapter adpt;
     TextView tvDebug;
 	ListView lvContacts;
 	ArrayList conList;
@@ -42,7 +48,6 @@ public class ContactListActivity extends ListActivity {
          * the activity that started this one.
          **/
         String args = getIntent().getStringExtra("args");
-        lvContacts = (ListView) findViewById(android.R.id.list);
         tvDebug = (TextView) findViewById(R.id.tvDebug);
         if (args != null) {
             if (args.equals("add")) {
@@ -56,13 +61,15 @@ public class ContactListActivity extends ListActivity {
         } else {
             Log.d("NullArgs", "Null Argument Reference. Passing control to Manager...");
         }
-        lvContacts.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> av, View v, int pos, long _id) {
-                Log.d(TAG, "Click event?");
+        PopulateList();
+        lvContacts.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(getApplicationContext(), "Click Listitem Detected:", Toast.LENGTH_LONG).show();
             }
         });
-        PopulateList();
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -100,9 +107,20 @@ public class ContactListActivity extends ListActivity {
 		dataManager dmanage = new dataManager(this);
 		dmanage.connectDatabase();
 		conArray = dmanage.getContactNames();
-		tvDebug.setText("Returned "+conArray.length+" records.");
-        ArrayAdapter adpt = new ArrayAdapter(this, R.layout.list_item_person, R.id.txt_display_name, conArray);
-        setListAdapter(adpt);
+        lvContacts = (ListView) findViewById(R.id.lv_contacts);
+        final ArrayList<String> list = new ArrayList<>();
+        for (int i = 0; i < conArray.length; i++)
+            list.add(conArray[i]);
+        tvDebug.setText("Returned "+conArray.length+" records.");
+        adpt = new ArrayAdapter(this, R.layout.list_item_person, R.id.txt_display_name, conArray);
+        lvContacts.setAdapter(adpt);
+        lvContacts.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, final View view, int pos, long _id) {
+                Log.d(TAG, "================= LISTITEMCLICK TRIGGER =================");
+            }
+        });
+
     }
 
     public void onActivityResult(int reqCode, int resultCode, Intent data) {
@@ -203,8 +221,6 @@ public class ContactListActivity extends ListActivity {
         return aList;
     }
 
-    // The last method in this class is the exit method to close the manager on button tap.
-
     public void exitContactMgr(View v) {
         // Send data back to processing activity for status reporting purposes.
         Intent reply = new Intent();
@@ -212,5 +228,29 @@ public class ContactListActivity extends ListActivity {
         reply.putExtra("total_records", 0);
         setResult(102, reply);
         finish();
+    }
+
+    // The last method in this class is the exit method to close the manager on button tap.
+
+    private class StableArrayAdapter extends ArrayAdapter<String> {
+        HashMap<String, Integer> mIdMap = new HashMap<String, Integer>();
+
+        public StableArrayAdapter(Context ctxt, int textResId, List<String> objs) {
+            super(ctxt, textResId, objs);
+            for (int i = 0; i < objs.size(); i++) {
+                mIdMap.put(objs.get(i), i);
+            }
+        }
+
+        @Override
+        public long getItemId(int pos) {
+            String item = getItem(pos);
+            return mIdMap.get(item);
+        }
+
+        @Override
+        public boolean hasStableIds() {
+            return true;
+        }
     }
 }
