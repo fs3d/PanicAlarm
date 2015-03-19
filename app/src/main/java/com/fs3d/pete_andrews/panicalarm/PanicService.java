@@ -23,8 +23,8 @@ public class PanicService extends Service {
     int serviceStatus;
     int notId = 106;
     private Context ctxt;
-    private int notifierGPS = 106;
-    private int notifierGeneric = 101;
+    int notifierGPS = 106;
+    int notifierGeneric = 101;
     public Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -105,44 +105,41 @@ public class PanicService extends Service {
         for (String a : Args) {
             Log.d("PanicService (Args)", "Processing each of " + String.valueOf(size) + ": " + a);
         }
-        if (Args[0].equals("NONE")) {
-            // No arguments were passed when starting the service.
-            if (serviceStatus == 1) {
-                notifyToast("Service called without any arguments.\nAlready running. No action taken.", Toast.LENGTH_SHORT);
-            } else {
-                serviceStatus = 1;
-                notifyToast("Service called without any arguments.\nLaunched and now running.", Toast.LENGTH_SHORT);
-            }
-        }
-        if (Args[0].equals("toggle_service")) {
-            // Toggle service request sent from an activity.
-            if (serviceStatus == 1) {
-                notifyToast("Termination signal sent.", Toast.LENGTH_SHORT);
-                // Service was already running when onStartCommand was called the first time,
-                // so we should stop everything that is running already.
+        int shortMsg = Toast.LENGTH_SHORT;
+        switch(Args[0]) {
+            case "NONE":
+                if (serviceStatus == 1) {
+                    notifyToast("Service called without arguments and is already running.\nNo action required.", shortMsg);
+                } else {
+                    serviceStatus = 1;
+                    notifyToast("Service called with no arguments passed.\nService is now running.", shortMsg);
+                }
+                break;
+            case "toggle_service":
+                if (serviceStatus == 1) {
+                    notifyToast("Termination signal sent.", shortMsg);
+                    mHandler = null;
+                    stopSelf();
+                } else {
+                    serviceStatus = 1;
+                    notifyToast("Service has now been launched.", shortMsg);
+                }
+                break;
+            case "kill_service":
                 mHandler = null;
-                // Finally, we can terminate the service itself and release its' memory.
                 stopSelf();
-            } else {
-                // This is the first run of the service, so we should do nothing.
-                notifyToast("Service has been launched.", Toast.LENGTH_SHORT);
-                serviceStatus = 1;
-            }
-        }
-        if (Args[0].equals("kill_service")) {
-            // Explicit termination request. If the service is not running, this will obviously
-            // never be received, so we don't need to check for it.
-            mHandler = null;
-            // Finally, we can terminate the service itself and release its' memory.
-            stopSelf();
-        }
-        if (Args[0].equals("start_service")) {
-            if (serviceStatus == 1) {
-                notifyToast("Service is already running.", Toast.LENGTH_SHORT);
-            } else {
-                notifyToast("Explicit launch signal received.\nService now launched.", Toast.LENGTH_SHORT);
-                serviceStatus = 1;
-            }
+                break;
+            case "start_service":
+                String output = "Explicit launch signal received.\n";
+                if(serviceStatus==1) output = output + "Service already running.";
+                else {
+                    output = output + "Starting service.";
+                    serviceStatus=1;
+                }
+                break;
+            case "call_gps":
+                callForGPS();
+                break;
         }
     }
 
@@ -223,9 +220,12 @@ public class PanicService extends Service {
         // First we need to check if we already have a GPS Manager instance running.
         // It is an inexpensive operation so can be called within the main thread.
         try {
-
+            gpsMgr.getLastKnownGPS();
         } catch (NullPointerException err) {
-            err.printStackTrace(); // Debug statement. GPS Manager is not already running, so we can instantiate a new one.
+            gpsMgr = new GPSManager(this.getApplicationContext());
+            gpsMgr.passHandler(mHandler);
+            gpsMgr.enableGPSUpdates(mHandler,"");
+            notifyToast("GPS Manager has been called. It should be up and running in a moment.",Toast.LENGTH_SHORT);
         }
     }
 }
