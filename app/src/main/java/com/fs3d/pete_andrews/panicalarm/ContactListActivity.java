@@ -111,7 +111,7 @@ public class ContactListActivity extends Activity {
         final ArrayList<String> list = new ArrayList<>();
         for (int i = 0; i < conArray.length; i++)
             list.add(conArray[i]);
-        tvDebug.setText("Returned "+conArray.length+" records.");
+        tvDebug.setText("Returned " + conArray.length + " records.");
         adpt = new ArrayAdapter(this, R.layout.list_item_person, R.id.txt_display_name, conArray);
         lvContacts.setAdapter(adpt);
         lvContacts.setOnItemClickListener(new OnItemClickListener() {
