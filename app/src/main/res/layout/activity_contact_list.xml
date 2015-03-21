@@ -18,7 +18,7 @@
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.DialogWindowTitle" />
 
     <ListView
-        android:id="@android:id/list"
+        android:id="@+id/lv_contacts"
 		android:layout_width="match_parent"
 		android:layout_height="10dp"
 		android:layout_gravity="center_horizontal"
