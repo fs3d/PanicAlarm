@@ -34,55 +34,55 @@
         <Button
             android:id="@+id/btn_getGpsStatus"
             style="?android:attr/buttonStyleSmall"
-            android:layout_width="180dp"
+            android:layout_width="170dp"
             android:layout_height="60dp"
             android:text="Examine GPS"
-            android:textSize="10dp" />
+            android:textSize="9dp" />
 
         <Button
             android:id="@+id/btn_getMicStatus"
             style="?android:attr/buttonStyleSmall"
-            android:layout_width="180dp"
+            android:layout_width="170dp"
             android:layout_height="60dp"
             android:text="Examine Mics"
-            android:textSize="10dp" />
+            android:textSize="9dp" />
 
         <Button
             android:id="@+id/btn_getCamStatus"
             style="?android:attr/buttonStyleSmall"
-            android:layout_width="180dp"
+            android:layout_width="170dp"
             android:layout_height="60dp"
             android:text="Examine Cameras"
-            android:textSize="10dp" />
+            android:textSize="9dp" />
 
         <Button
             android:id="@+id/btn_getNetStatus"
             style="?android:attr/buttonStyleSmall"
-            android:layout_width="180dp"
+            android:layout_width="170dp"
             android:layout_height="60dp"
             android:text="Examine Network"
-            android:textSize="10dp" />
+            android:textSize="9dp" />
 
         <Button
             android:id="@+id/btn_getSensors"
             style="?android:attr/buttonStyleSmall"
-            android:layout_width="180dp"
+            android:layout_width="170dp"
             android:layout_height="60dp"
             android:text="Examine Sensors"
-            android:textSize="10dp" />
+            android:textSize="9dp" />
 
         <Button
             android:id="@+id/btn_testPwrStatus"
             style="?android:attr/buttonStyleSmall"
-            android:layout_width="180dp"
+            android:layout_width="170dp"
             android:layout_height="60dp"
             android:text="Examine Power Triggers"
-            android:textSize="10dp" />
+            android:textSize="9dp" />
 
         <Button
             android:id="@+id/btn_triggerSvcTest"
             style="?android:attr/buttonStyleSmall"
-            android:layout_width="360dp"
+            android:layout_width="340dp"
             android:layout_height="60dp"
             android:layout_columnSpan="2"
             android:onClick="launchService"
@@ -91,42 +91,42 @@
         <Button
             android:id="@+id/btn_triggerNotification"
             style="?android:attr/buttonStyleSmall"
-            android:layout_width="180dp"
+            android:layout_width="170dp"
             android:layout_height="60dp"
             android:text="Trigger test notification"
-            android:textSize="10dp" />
+            android:textSize="9dp" />
 
         <Button
             android:id="@+id/btn_triggerTestPanic"
             style="?android:attr/buttonStyleSmall"
-            android:layout_width="180dp"
+            android:layout_width="170dp"
             android:layout_height="60dp"
             android:text="Test panic mode"
-            android:textSize="10dp" />
+            android:textSize="9dp" />
 
         <Button
             android:id="@+id/btn_killService"
             style="?android:attr/buttonStyleSmall"
-            android:layout_width="360dp"
+            android:layout_width="340dp"
             android:layout_height="60dp"
             android:layout_columnSpan="2"
             android:text="Terminate Panic Service" />
 
         <Button
-            android:id="@+id/btn_other1"
+            android:id="@+id/btn_testLastLoc"
             style="?android:attr/buttonStyleSmall"
-            android:layout_width="180dp"
+            android:layout_width="170dp"
             android:layout_height="60dp"
-            android:text="New Button"
-            android:textSize="10dp" />
+            android:text="Get last GPS Location"
+            android:textSize="9dp" />
 
         <Button
-            android:id="@+id/btn_other2"
+            android:id="@+id/btn_toggleGPS"
             style="?android:attr/buttonStyleSmall"
-            android:layout_width="180dp"
+            android:layout_width="170dp"
             android:layout_height="60dp"
-            android:text="New Button"
-            android:textSize="10dp" />
+            android:text="Toggle GPS Updates"
+            android:textSize="9dp" />
     </GridLayout>
 
 </LinearLayout>

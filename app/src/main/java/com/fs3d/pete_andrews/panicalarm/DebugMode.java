@@ -28,9 +28,7 @@ public class DebugMode extends ActionBarActivity {
         btn_repCam = (Button) findViewById(R.id.btn_getCamStatus);
         btn_repMic = (Button) findViewById(R.id.btn_getCamStatus);
         btn_repSMS = (Button) findViewById(R.id.btn_getMicStatus);
-        btn_repMail = (Button) findViewById(R.id.btn_other1);
         btn_repPwr = (Button) findViewById(R.id.btn_testPwrStatus);
-        btn_repHeadSet = (Button) findViewById(R.id.btn_other2);
         btn_startSvc = (Button) findViewById(R.id.btn_triggerSvcTest);
         btn_killSvc = (Button) findViewById(R.id.btn_killService);
         // Set onClickListener to handle long press on the status text.
@@ -73,14 +71,26 @@ public class DebugMode extends ActionBarActivity {
 
     // Additional methods below e.g. onClick XML redirects go here.
 
-    public void reportGPSStatus(View v) {
-        statusBox.append("\nGPS Status Button touched.\nGPS Status is [TEST].");
-    }
-
     public void launchService(View v) {
         // This will launch the main Panic Service in test mode.
         Intent intent = new Intent(this.getApplicationContext(), PanicService.class);
         intent.putExtra("args", new String[]{"start_service"});
         startService(intent);
+    }
+
+    public void updateService(View v){
+        // This will send an update to the service.
+        Intent upd = new Intent(this.getApplicationContext(), PanicService.class);
+        String passedArg = "";
+        String exmn = v.toString();
+        passedArg = examineView(exmn);
+        upd.putExtra("args", passedArg);
+        startService(upd);
+    }
+
+    public String examineView(String input){
+        String argument = "";
+
+        return argument;
     }
 }

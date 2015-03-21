@@ -34,6 +34,7 @@ public class GPSManager implements
     LocationManager locMgr;
     private LocationRequest mLocRequest;
     Handler xHndl;
+    LocationListener locListnr;
 
     // Constructor calls
     public GPSManager() {
@@ -41,6 +42,7 @@ public class GPSManager implements
         this.interval = 10000;
         this.dist = 5;
         this.accuracy = 1;
+        locListnr = this;
         initPlayServices();
     }
 
@@ -50,6 +52,7 @@ public class GPSManager implements
         this.interval = 10000;
         this.dist = 5;
         this.accuracy = 1;
+        locListnr = this;
         initPlayServices();
     }
 
@@ -59,6 +62,7 @@ public class GPSManager implements
         this.interval = interval;
         this.dist = dist;
         this.accuracy = 1;
+        locListnr = this;
         initPlayServices();
     }
 
@@ -78,6 +82,7 @@ public class GPSManager implements
 
     protected void endPlayServices(){
         mGAPIClient.disconnect();
+        locListnr = null;
         mGAPIClient = null;
     }
 
@@ -89,7 +94,7 @@ public class GPSManager implements
                 mLocRequest.setFastestInterval(interval / 2);
                 mLocRequest.setSmallestDisplacement(dist);
                 mLocRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-                LocationServices.FusedLocationApi.requestLocationUpdates(mGAPIClient, mLocRequest, this);
+                LocationServices.FusedLocationApi.requestLocationUpdates(mGAPIClient, mLocRequest, locListnr);
             }
         }
     }

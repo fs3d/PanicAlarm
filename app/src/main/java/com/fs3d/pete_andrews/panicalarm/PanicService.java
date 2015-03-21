@@ -136,6 +136,7 @@ public class PanicService extends Service {
                     output = output + "Starting service.";
                     serviceStatus=1;
                 }
+                notifyToast(output,Toast.LENGTH_SHORT);
                 break;
             case "call_gps":
                 callForGPS();
@@ -221,8 +222,12 @@ public class PanicService extends Service {
         // It is an inexpensive operation so can be called within the main thread.
         try {
             gpsMgr.getLastKnownGPS();
+            gpsMgr.terminateGPSRequest(); // This will only be called if GPSManager has already been declared.
+            gpsMgr = null;
+            notifyToast("GPS Manager is being terminated. Location updates should now cease.",Toast.LENGTH_SHORT);
         } catch (NullPointerException err) {
-            gpsMgr = new GPSManager(this.getApplicationContext());
+            gpsMgr = new GPSManager(this.getApplicationContext());  // These lines will only be called if a NullPointerException has been raised i.e.
+                                                                    // if GPSManager has not been instantiated yet.
             gpsMgr.passHandler(mHandler);
             gpsMgr.enableGPSUpdates(mHandler,"");
             notifyToast("GPS Manager has been called. It should be up and running in a moment.",Toast.LENGTH_SHORT);
