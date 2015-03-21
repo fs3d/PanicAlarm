@@ -5,6 +5,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -40,6 +41,7 @@ public class GPSManager implements
         this.interval = 10000;
         this.dist = 5;
         this.accuracy = 1;
+        initPlayServices();
     }
 
     public GPSManager(Context ctxt) {
@@ -48,6 +50,7 @@ public class GPSManager implements
         this.interval = 10000;
         this.dist = 5;
         this.accuracy = 1;
+        initPlayServices();
     }
 
     public GPSManager(Context ctxt, int interval, int dist){
@@ -56,6 +59,7 @@ public class GPSManager implements
         this.interval = interval;
         this.dist = dist;
         this.accuracy = 1;
+        initPlayServices();
     }
 
     public void passHandler(Handler xHndler){
@@ -78,12 +82,28 @@ public class GPSManager implements
     }
 
     protected void createLocationRequest(int interval, int dist){
-        mLocRequest = new LocationRequest();
-        mLocRequest.setInterval(interval);
-        mLocRequest.setFastestInterval(interval / 2);
-        mLocRequest.setSmallestDisplacement(dist);
-        mLocRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        LocationServices.FusedLocationApi.requestLocationUpdates(mGAPIClient, mLocRequest, this);
+        if(mGAPIClient!=null){
+            if(mGAPIClient.isConnected()) {
+                mLocRequest = new LocationRequest();
+                mLocRequest.setInterval(interval);
+                mLocRequest.setFastestInterval(interval / 2);
+                mLocRequest.setSmallestDisplacement(dist);
+                mLocRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+                LocationServices.FusedLocationApi.requestLocationUpdates(mGAPIClient, mLocRequest, this);
+            }
+        }
+    }
+
+    private void passMessage(String... Args){
+        Message msg = xHndl.obtainMessage();
+        Bundle b = msg.getData();
+        for(int i=0;i<Args.length;i=i+2){
+            String key = Args[i];
+            String value = Args[i+1];
+            b.putString(key, value);
+        }
+        msg.setData(b);
+        xHndl.sendMessage(msg);
     }
 
     // The following methods are mandatory for the purposes of this service and deal with
@@ -98,6 +118,7 @@ public class GPSManager implements
         String lat = String.valueOf(latitude);
         String lon = String.valueOf(longitude);
         Log.d(TAG, "Initial Play Store Connection. Last known GPS Coordinates: " + lon + "/" + lat);
+        passMessage(new String[]{"arg","notifyGPS","lat",lat,"lon",lon});
     }
 
     @Override
