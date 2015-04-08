@@ -14,6 +14,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.ExpandableListView.OnGroupClickListener;
+import android.widget.ExpandableListView.OnGroupCollapseListener;
+import android.widget.ExpandableListView.OnGroupExpandListener;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,8 +39,9 @@ public class ContactListActivity extends Activity {
     ArrayAdapter adpt;
     TextView tvDebug;
 	ListView lvContacts;
-	ArrayList conList;
-	String[] conArray;
+    ExpandableListView elvContacts;
+    ArrayList<Contact> conList;
+    String[] conArray;
     private dataManager dmgr;
 
     @Override
@@ -66,6 +72,40 @@ public class ContactListActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(getApplicationContext(), "Click Listitem Detected:", Toast.LENGTH_LONG).show();
+            }
+        });
+        elvContacts.setOnGroupClickListener(new OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView parent, View v, int grpPos, long _id) {
+                return false;
+            }
+        });
+
+        elvContacts.setOnChildClickListener(new OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                return false;
+            }
+        });
+
+        elvContacts.setOnGroupExpandListener(new OnGroupExpandListener() {
+            @Override
+            public void onGroupExpand(int groupPosition) {
+
+            }
+        });
+
+        elvContacts.setOnGroupCollapseListener(new OnGroupCollapseListener() {
+            @Override
+            public void onGroupCollapse(int groupPosition) {
+
+            }
+        });
+
+        elvContacts.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View v, int pos, long _id) {
+                return false;
             }
         });
     }
