@@ -88,6 +88,11 @@ public class DebugMode extends ActionBarActivity {
         startService(upd);
     }
 
+    public void testBroadcast(View v) {
+        MessageManager msgr = new MessageManager(this);
+        msgr.broadcastTestMsg();
+    }
+
     public String examineView(String input){
         String argument = "";
 

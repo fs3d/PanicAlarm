@@ -127,6 +127,14 @@
             android:layout_height="60dp"
             android:text="Toggle GPS Updates"
             android:textSize="9dp" />
+
+        <Button
+            android:id="@+id/btn_test_messager"
+            android:layout_width="340dp"
+            android:layout_height="60dp"
+            android:layout_columnSpan="2"
+            android:onClick="testBroadcast"
+            android:text="Send Test SMS" />
     </GridLayout>
 
 </LinearLayout>

@@ -172,6 +172,7 @@ public class dataManager {
                 break;
             case 3:
                 // IM retrieval mode.
+                // This is to be implemented when IM support comes along (ie when I write it)
                 ci_t = CommonDataKinds.Im.PROTOCOL;
                 ci_v = CommonDataKinds.Im.DATA;
                 conUri = Data.CONTENT_URI;

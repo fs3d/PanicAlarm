@@ -23,7 +23,7 @@ android {
         versionProps['VERSION_PATCH'] = versionPatch.toString()
         versionProps['VERSION_BUILD'] = versionBuild.toString()
         versionProps['VERSION_CODE'] = version_code.toString()
-        versionProps['VERSION_STRING'] = "0.01." + versionPatch.toString() + " (Build " + versionBuild.toString() + ")"
+        versionProps['VERSION_STRING'] = "0.03." + versionPatch.toString() + " (Build " + versionBuild.toString() + ")"
 
         versionProps.store(versionPropsFile.newWriter(), null)
 
